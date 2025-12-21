@@ -6,11 +6,11 @@ A bilingual (Arabic/English) Progressive Web App designed to educate the public 
 
 ## 🌟 Features
 
-- **📚 AMR Education** - Learn about antimicrobial resistance, its causes, and prevention
-- **🎮 Interactive Quiz** - Test your knowledge with 100+ scenario-based questions
-- **📋 Guidelines** - Access practical guidance for common health situations
-- **💊 AWaRe Classification** - Understand the WHO AWaRe antibiotic classification
-- **🖼️ Media Gallery** - Educational infographics, audio, and video content
+- **🏠 Home** - Daily AMR tips with rotating educational facts
+- **🎮 Interactive Quiz** - Test your knowledge with 100+ scenario-based questions across 16 categories
+- **� Awareness Center** - Educational content about AMR, Yemen-specific statistics, and shareable facts
+- **🖼️ Media Gallery** - Educational infographics, podcasts, and video content
+- **⚙️ Settings** - Language toggle (Arabic/English) and theme selection (Light/Dark/System)
 - **🌐 Bilingual** - Full Arabic and English support with RTL layout
 - **📱 PWA** - Install on any device for offline access
 
@@ -18,10 +18,8 @@ A bilingual (Arabic/English) Progressive Web App designed to educate the public 
 
 - **React 19** - Modern UI framework
 - **Vite 7** - Fast build tool
-- **React Router** - Client-side routing
+- **React Router 7** - Client-side routing
 - **Vite PWA** - Progressive Web App support
-- **Google Gemini AI** - AI-powered health assistant (optional)
-- **Supabase** - Backend services (optional)
 
 ## 🚀 Getting Started
 
@@ -56,14 +54,14 @@ npm run preview  # Preview production build
 ```
 src/
 ├── components/
-│   ├── layout/         # Navigation components
-│   ├── media/          # Media player, gallery
-│   └── feedback/       # Modals, alerts, overlays
-├── contexts/           # React contexts
-├── data/               # Quiz scenarios, guidelines
+│   ├── layout/         # Navigation (BottomNav)
+│   ├── media/          # MediaPlayer, ImageGallery
+│   └── feedback/       # EmergencyScreen, MedicalDisclaimer
+├── contexts/           # AppContext (language, theme, state)
+├── data/               # Quiz scenarios, guidelines data
 ├── i18n/               # Translations (ar, en)
-├── lib/                # Utility functions, API clients
-└── pages/              # Route pages
+├── lib/                # Utility functions
+└── pages/              # Route pages (Home, Quiz, Awareness, Media, Settings)
 ```
 
 ## 🌐 Deployment
@@ -81,7 +79,7 @@ MIT License - See [LICENSE](LICENSE) for details.
 
 ## 👥 Contributors
 
-Developed for antimicrobial resistance awareness in Yemen.
+Developed with ❤️ by Gamalix for antimicrobial resistance awareness in Yemen.
 
 ---
 
