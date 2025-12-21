@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { AppProvider, useApp } from './contexts/AppContext'
-import BottomNav from './components/shared/BottomNav'
-import EmergencyScreen from './components/shared/EmergencyScreen'
+import BottomNav from './components/layout/BottomNav'
+import EmergencyScreen from './components/feedback/EmergencyScreen'
 
 // Page imports
 import WelcomePage from './pages/WelcomePage'

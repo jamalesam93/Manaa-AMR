@@ -1,16 +1,88 @@
-# React + Vite
+# Mana'a - مناعة
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**Antimicrobial Resistance (AMR) Awareness App for Yemen**
 
-Currently, two official plugins are available:
+A bilingual (Arabic/English) Progressive Web App designed to educate the public about antimicrobial resistance and promote responsible antibiotic use.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🌟 Features
 
-## React Compiler
+- **📚 AMR Education** - Learn about antimicrobial resistance, its causes, and prevention
+- **🎮 Interactive Quiz** - Test your knowledge with 100+ scenario-based questions
+- **📋 Guidelines** - Access practical guidance for common health situations
+- **💊 AWaRe Classification** - Understand the WHO AWaRe antibiotic classification
+- **🖼️ Media Gallery** - Educational infographics, audio, and video content
+- **🌐 Bilingual** - Full Arabic and English support with RTL layout
+- **📱 PWA** - Install on any device for offline access
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## 🛠️ Tech Stack
 
-## Expanding the ESLint configuration
+- **React 19** - Modern UI framework
+- **Vite 7** - Fast build tool
+- **React Router** - Client-side routing
+- **Vite PWA** - Progressive Web App support
+- **Google Gemini AI** - AI-powered health assistant (optional)
+- **Supabase** - Backend services (optional)
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## 🚀 Getting Started
+
+### Prerequisites
+
+- Node.js 18+ installed
+- npm or yarn
+
+### Installation
+
+```bash
+# Clone the repository
+git clone https://github.com/jamalesam93/Manaa-AMR.git
+cd Manaa-AMR
+
+# Install dependencies
+npm install
+
+# Start development server
+npm run dev
+```
+
+### Build for Production
+
+```bash
+npm run build
+npm run preview  # Preview production build
+```
+
+## 📁 Project Structure
+
+```
+src/
+├── components/
+│   ├── layout/         # Navigation components
+│   ├── media/          # Media player, gallery
+│   └── feedback/       # Modals, alerts, overlays
+├── contexts/           # React contexts
+├── data/               # Quiz scenarios, guidelines
+├── i18n/               # Translations (ar, en)
+├── lib/                # Utility functions, API clients
+└── pages/              # Route pages
+```
+
+## 🌐 Deployment
+
+This app is optimized for deployment on:
+- **Vercel** (recommended)
+- **Netlify**
+- **Cloudflare Pages**
+
+Simply connect your GitHub repository and deploy!
+
+## 📄 License
+
+MIT License - See [LICENSE](LICENSE) for details.
+
+## 👥 Contributors
+
+Developed for antimicrobial resistance awareness in Yemen.
+
+---
+
+**Made with ❤️ for public health education**

@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useApp } from '../contexts/AppContext'
-import MediaPlayer from '../components/shared/MediaPlayer'
-import ImageGallery from '../components/shared/ImageGallery'
+import MediaPlayer from '../components/media/MediaPlayer'
+import ImageGallery from '../components/media/ImageGallery'
 
 // Infographics data with language-specific images
 const INFOGRAPHICS_DATA = [
@@ -171,18 +171,27 @@ export default function MediaGalleryPage() {
                         </p>
                     </div>
 
-                    <div className="flex flex-col gap-4">
-                        {getVideoContent(language).map((video) => (
-                            <div key={video.id} className="card">
-                                <MediaPlayer
-                                    type="video"
-                                    src={video.src}
-                                    title={language === 'ar' ? video.titleAr : video.titleEn}
-                                    description={language === 'ar' ? video.descriptionAr : video.descriptionEn}
-                                    downloadable={true}
-                                />
-                            </div>
-                        ))}
+                    {/* Coming Soon Placeholder */}
+                    <div className="card" style={{
+                        textAlign: 'center',
+                        padding: 'var(--space-10) var(--space-6)',
+                        background: 'linear-gradient(135deg, rgba(45, 122, 122, 0.05) 0%, rgba(212, 165, 116, 0.05) 100%)'
+                    }}>
+                        <div style={{ fontSize: '4rem', marginBottom: 'var(--space-4)' }}>🎬</div>
+                        <h3 style={{ color: 'var(--color-primary)', marginBottom: 'var(--space-2)' }}>
+                            {language === 'ar' ? 'قريباً' : 'Coming Soon'}
+                        </h3>
+                        <p style={{
+                            color: 'var(--color-text-secondary)',
+                            maxWidth: '300px',
+                            margin: '0 auto',
+                            lineHeight: '1.6'
+                        }}>
+                            {language === 'ar'
+                                ? 'نعمل على إعداد محتوى فيديو تعليمي مميز عن مقاومة المضادات الحيوية. ترقبوا التحديثات!'
+                                : 'We are preparing exciting educational video content about antibiotic resistance. Stay tuned for updates!'
+                            }
+                        </p>
                     </div>
                 </div>
             )}
