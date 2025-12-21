@@ -101,6 +101,13 @@ export default function SettingsPage() {
                     <p style={{ fontSize: 'var(--font-size-sm)', color: 'var(--color-text-tertiary)' }}>
                         {t('settings.version')} 1.0.0
                     </p>
+                    <p style={{
+                        fontSize: 'var(--font-size-sm)',
+                        color: 'var(--color-text-secondary)',
+                        marginTop: 'var(--space-3)'
+                    }}>
+                        Developed with ❤️ by Gamaliz
+                    </p>
                 </div>
             </section>
         </div>
