@@ -106,7 +106,7 @@ export default function SettingsPage() {
                         color: 'var(--color-text-secondary)',
                         marginTop: 'var(--space-3)'
                     }}>
-                        Developed with ❤️ by Gamaliz
+                        Developed with ❤️ by Gamalix
                     </p>
                 </div>
             </section>
