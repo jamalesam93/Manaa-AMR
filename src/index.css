@@ -166,7 +166,7 @@
 /* --------------------------------------------------------------------------
    Global Styles
    -------------------------------------------------------------------------- */
-@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700&display=swap');
+/* Font is loaded via index.html with preconnect for better performance */
 
 *,
 *::before,

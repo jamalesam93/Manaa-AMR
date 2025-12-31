@@ -60,4 +60,26 @@ export default defineConfig({
       }
     })
   ],
+  build: {
+    // Code splitting optimizations
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          // Separate vendor libraries
+          'vendor-react': ['react', 'react-dom'],
+          'vendor-router': ['react-router-dom'],
+          // Separate quiz data (large files)
+          'data-quiz': [
+            './src/data/quiz-scenarios.js',
+            './src/data/quiz-scenarios-1.js',
+            './src/data/quiz-scenarios-2.js',
+            './src/data/quiz-scenarios-3.js'
+          ]
+        }
+      }
+    },
+    // Improve chunk size warnings threshold
+    chunkSizeWarningLimit: 500
+  }
 })
+
