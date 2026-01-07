@@ -56,12 +56,26 @@ src/
 ├── components/
 │   ├── layout/         # Navigation (BottomNav)
 │   ├── media/          # MediaPlayer, ImageGallery
-│   └── feedback/       # EmergencyScreen, MedicalDisclaimer
+│   ├── feedback/       # EmergencyScreen, MedicalDisclaimer, ErrorBoundary, SkeletonLoader
+│   └── gamification/   # AchievementToast, CategorySelector, DailyChallenge, ProgressChart
 ├── contexts/           # AppContext (language, theme, state)
 ├── data/               # Quiz scenarios, guidelines data
 ├── i18n/               # Translations (ar, en)
-├── lib/                # Utility functions
-└── pages/              # Route pages (Home, Quiz, Awareness, Media, Settings)
+├── utils/              # Utility functions
+│   ├── progressTracker.js    # Quiz progress and statistics
+│   ├── streakTracker.js      # Daily streak tracking
+│   ├── achievements.js       # Achievement system
+│   ├── dailyChallenge.js     # Daily challenge logic
+│   ├── shareUtils.js         # Social sharing
+│   └── keyboardShortcuts.js  # Keyboard navigation
+└── pages/              # Route pages
+    ├── HomePage.jsx
+    ├── SymptomsPage.jsx (Quiz)
+    ├── AwarenessPage.jsx
+    ├── MediaGalleryPage.jsx
+    ├── SettingsPage.jsx
+    ├── AchievementGalleryPage.jsx
+    └── ProgressPage.jsx
 ```
 
 ## 🌐 Deployment
@@ -76,6 +90,46 @@ Simply connect your GitHub repository and deploy!
 ## 📄 License
 
 MIT License - See [LICENSE](LICENSE) for details.
+
+## 🎮 Gamification Details
+
+### Achievements
+Unlock achievements by:
+- Completing your first quiz
+- Scoring 100% on quizzes
+- Maintaining daily streaks (3, 7, 14, 30 days)
+- Completing multiple quizzes (10, 50, 100)
+- Answering many questions (100, 500, 1000)
+- Maintaining high accuracy (80%+, 90%+)
+- Exploring different categories
+- Completing daily challenges
+
+### Progress Tracking
+- View your quiz history and statistics
+- Track accuracy and improvement over time
+- See category breakdown
+- Monitor your best scores and streaks
+- Visualize progress with interactive charts
+
+### Daily Challenge
+- One question per day
+- Same question for everyone (changes daily)
+- Track completion streak
+- Earn special daily challenge achievements
+
+## 🚀 Recent Updates
+
+### v2.0.0 - Gamification Update
+- ✅ Progress tracking system
+- ✅ Achievement/badge system (20+ achievements)
+- ✅ Daily challenge feature
+- ✅ Streak counter
+- ✅ Progress charts and statistics
+- ✅ Achievement gallery
+- ✅ Share quiz results
+- ✅ Category-based quiz selection
+- ✅ Error boundaries for better error handling
+- ✅ Keyboard shortcuts for navigation
 
 ## 👥 Contributors
 
