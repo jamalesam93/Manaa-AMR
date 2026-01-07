@@ -59,7 +59,7 @@ export default function CategorySelector({ selectedCategory, onSelect, language 
                 gap: 'var(--space-2)'
             }}>
                 <button
-                    className={`btn ${selectedCategory === 'all' ? 'btn-primary' : 'btn-outline'}`
+                    className={selectedCategory === 'all' ? 'btn btn-primary' : 'btn btn-outline'}
                     onClick={() => onSelect('all')}
                     style={{ fontSize: 'var(--font-size-sm)' }}
                 >
@@ -68,7 +68,7 @@ export default function CategorySelector({ selectedCategory, onSelect, language 
                 {QUIZ_CATEGORIES.map(cat => (
                     <button
                         key={cat}
-                        className={`btn ${selectedCategory === cat ? 'btn-primary' : 'btn-outline'}`}
+                        className={selectedCategory === cat ? 'btn btn-primary' : 'btn btn-outline'}
                         onClick={() => onSelect(cat)}
                         style={{ fontSize: 'var(--font-size-sm)' }}
                     >
@@ -79,4 +79,3 @@ export default function CategorySelector({ selectedCategory, onSelect, language 
         </div>
     )
 }
-
