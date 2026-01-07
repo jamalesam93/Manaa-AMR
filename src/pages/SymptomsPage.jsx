@@ -1,6 +1,12 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useApp } from '../contexts/AppContext'
-import { ALL_QUIZ_SCENARIOS, shuffleArray, QUESTIONS_PER_QUIZ } from '../data/quiz-scenarios'
+import { ALL_QUIZ_SCENARIOS, shuffleArray, QUESTIONS_PER_QUIZ, getScenariosByCategory } from '../data/quiz-scenarios'
+import { saveQuizResult, getStatistics } from '../utils/progressTracker'
+import { updateStreak, getStreakInfo } from '../utils/streakTracker'
+import { checkAchievements } from '../utils/achievements'
+import { shareQuizResult } from '../utils/shareUtils'
+import CategorySelector from '../components/gamification/CategorySelector'
+import AchievementToast from '../components/gamification/AchievementToast'
 
 export default function SymptomsPage() {
     const { language, t } = useApp()
@@ -10,13 +16,22 @@ export default function SymptomsPage() {
     const [showResult, setShowResult] = useState(false)
     const [quizScenarios, setQuizScenarios] = useState([])
     const [selectedAnswer, setSelectedAnswer] = useState(null)
+    const [selectedCategory, setSelectedCategory] = useState('all')
+    const [newAchievement, setNewAchievement] = useState(null)
 
     const getText = (textObj) => language === 'ar' ? textObj.ar : textObj.en
 
     const handleStartQuiz = () => {
-        // Select random subset of questions each time
-        const shuffled = shuffleArray(ALL_QUIZ_SCENARIOS)
-        const selected = shuffled.slice(0, QUESTIONS_PER_QUIZ)
+        // Select questions based on category
+        let scenarios = selectedCategory === 'all' 
+            ? ALL_QUIZ_SCENARIOS 
+            : getScenariosByCategory(selectedCategory)
+        
+        // If category has fewer questions than needed, use all available
+        const count = Math.min(QUESTIONS_PER_QUIZ, scenarios.length)
+        const shuffled = shuffleArray(scenarios)
+        const selected = shuffled.slice(0, count)
+        
         setQuizScenarios(selected)
         setCurrentStep('quiz')
         setCurrentQuestion(0)
@@ -49,6 +64,31 @@ export default function SymptomsPage() {
             setShowResult(false)
             setSelectedAnswer(null)
         } else {
+            // Quiz complete - save progress and check achievements
+            const correctCount = userAnswers.filter(a => a.correct).length
+            const percentage = Math.round((correctCount / quizScenarios.length) * 100)
+            
+            // Save quiz result
+            saveQuizResult({
+                score: percentage,
+                total: quizScenarios.length,
+                correct: correctCount,
+                scenarios: quizScenarios,
+                date: new Date().toISOString()
+            })
+            
+            // Update streak
+            updateStreak()
+            
+            // Check for new achievements
+            const stats = getStatistics()
+            const streak = getStreakInfo()
+            const achievements = checkAchievements(stats, streak, language)
+            
+            if (achievements.newlyUnlocked.length > 0) {
+                setNewAchievement(achievements.newlyUnlocked[0])
+            }
+            
             setCurrentStep('summary')
         }
     }
@@ -108,6 +148,12 @@ export default function SymptomsPage() {
                         <li>📚 {t('quiz.intro.step3')}</li>
                     </ul>
                 </div>
+
+                <CategorySelector
+                    selectedCategory={selectedCategory}
+                    onSelect={setSelectedCategory}
+                    language={language}
+                />
 
                 <div className="card" style={{
                     marginBottom: 'var(--space-6)',
@@ -380,25 +426,44 @@ export default function SymptomsPage() {
                     </p>
                 </div>
 
-                <div style={{ display: 'flex', gap: 'var(--space-3)' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-3)' }}>
                     <button
-                        className="btn btn-outline btn-lg"
-                        onClick={handleRestart}
-                        style={{ flex: 1 }}
-                    >
-                        {t('quiz.tryAgain')}
-                    </button>
-                    <a
-                        href="/awareness"
                         className="btn btn-primary btn-lg"
-                        style={{ flex: 1, textDecoration: 'none', textAlign: 'center' }}
+                        onClick={() => shareQuizResult(correctCount, quizScenarios.length, percentage, language)}
+                        style={{ width: '100%' }}
                     >
-                        {t('quiz.learnMore')}
-                    </a>
+                        📤 {language === 'ar' ? 'شارك النتيجة' : 'Share Result'}
+                    </button>
+                    <div style={{ display: 'flex', gap: 'var(--space-3)' }}>
+                        <button
+                            className="btn btn-outline btn-lg"
+                            onClick={handleRestart}
+                            style={{ flex: 1 }}
+                        >
+                            {t('quiz.tryAgain')}
+                        </button>
+                        <a
+                            href="/awareness"
+                            className="btn btn-primary btn-lg"
+                            style={{ flex: 1, textDecoration: 'none', textAlign: 'center' }}
+                        >
+                            {t('quiz.learnMore')}
+                        </a>
+                    </div>
                 </div>
             </div>
         )
     }
 
-    return null
+    return (
+        <>
+            {newAchievement && (
+                <AchievementToast
+                    achievement={newAchievement}
+                    onClose={() => setNewAchievement(null)}
+                    language={language}
+                />
+            )}
+        </>
+    )
 }

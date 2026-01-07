@@ -1,5 +1,9 @@
 import { useState, useEffect } from 'react'
 import { useApp } from '../contexts/AppContext'
+import { getStatistics } from '../utils/progressTracker'
+import { getStreakInfo } from '../utils/streakTracker'
+import { getUnlockedAchievements, ACHIEVEMENTS } from '../utils/achievements'
+import DailyChallenge from '../components/gamification/DailyChallenge'
 
 // AMR Awareness Facts - bilingual
 const AMR_FACTS = [
@@ -41,6 +45,14 @@ export default function HomePage() {
     const { t, language } = useApp()
     const [currentFactIndex, setCurrentFactIndex] = useState(0)
     const [isVisible, setIsVisible] = useState(true)
+    const [stats, setStats] = useState(null)
+    const [streak, setStreak] = useState(null)
+    
+    // Load progress data
+    useEffect(() => {
+        setStats(getStatistics())
+        setStreak(getStreakInfo())
+    }, [])
 
     // Rotate facts every 10 seconds with fade effect
     useEffect(() => {
@@ -97,6 +109,185 @@ export default function HomePage() {
                     <p style={{ opacity: 0.9, margin: 0 }}>
                         {t('home.welcomeMessage')}
                     </p>
+                </div>
+
+                {/* Daily Challenge */}
+                <DailyChallenge />
+
+                {/* Progress Dashboard */}
+                {stats && stats.totalQuizzes > 0 && (
+                    <div className="card" style={{ marginTop: 'var(--space-4)' }}>
+                        <h3 style={{ marginBottom: 'var(--space-4)' }}>
+                            {language === 'ar' ? 'تقدمك' : 'Your Progress'}
+                        </h3>
+                        <div style={{
+                            display: 'grid',
+                            gridTemplateColumns: 'repeat(2, 1fr)',
+                            gap: 'var(--space-4)',
+                            marginBottom: 'var(--space-4)'
+                        }}>
+                            <div style={{ textAlign: 'center' }}>
+                                <div style={{
+                                    fontSize: 'var(--font-size-3xl)',
+                                    fontWeight: 'bold',
+                                    color: 'var(--color-primary)',
+                                    marginBottom: 'var(--space-1)'
+                                }}>
+                                    {stats.totalQuizzes}
+                                </div>
+                                <div style={{
+                                    fontSize: 'var(--font-size-sm)',
+                                    color: 'var(--color-text-secondary)'
+                                }}>
+                                    {language === 'ar' ? 'اختبارات مكتملة' : 'Quizzes'}
+                                </div>
+                            </div>
+                            <div style={{ textAlign: 'center' }}>
+                                <div style={{
+                                    fontSize: 'var(--font-size-3xl)',
+                                    fontWeight: 'bold',
+                                    color: 'var(--color-success)',
+                                    marginBottom: 'var(--space-1)'
+                                }}>
+                                    {stats.accuracy}%
+                                </div>
+                                <div style={{
+                                    fontSize: 'var(--font-size-sm)',
+                                    color: 'var(--color-text-secondary)'
+                                }}>
+                                    {language === 'ar' ? 'دقة' : 'Accuracy'}
+                                </div>
+                            </div>
+                            <div style={{ textAlign: 'center' }}>
+                                <div style={{
+                                    fontSize: 'var(--font-size-3xl)',
+                                    fontWeight: 'bold',
+                                    color: 'var(--color-warning)',
+                                    marginBottom: 'var(--space-1)'
+                                }}>
+                                    {stats.bestScore}%
+                                </div>
+                                <div style={{
+                                    fontSize: 'var(--font-size-sm)',
+                                    color: 'var(--color-text-secondary)'
+                                }}>
+                                    {language === 'ar' ? 'أفضل نتيجة' : 'Best Score'}
+                                </div>
+                            </div>
+                            <div style={{ textAlign: 'center' }}>
+                                <div style={{
+                                    fontSize: 'var(--font-size-3xl)',
+                                    fontWeight: 'bold',
+                                    color: streak?.currentStreak > 0 ? 'var(--color-danger)' : 'var(--color-text-tertiary)',
+                                    marginBottom: 'var(--space-1)'
+                                }}>
+                                    {streak?.currentStreak || 0} 🔥
+                                </div>
+                                <div style={{
+                                    fontSize: 'var(--font-size-sm)',
+                                    color: 'var(--color-text-secondary)'
+                                }}>
+                                    {language === 'ar' ? 'سلسلة أيام' : 'Day Streak'}
+                                </div>
+                            </div>
+                        </div>
+                        {getUnlockedAchievements().length > 0 && (
+                            <div style={{
+                                paddingTop: 'var(--space-4)',
+                                borderTop: '1px solid var(--color-border-light)'
+                            }}>
+                                <div style={{
+                                    fontSize: 'var(--font-size-sm)',
+                                    color: 'var(--color-text-secondary)',
+                                    marginBottom: 'var(--space-2)'
+                                }}>
+                                    {language === 'ar' ? 'الإنجازات:' : 'Achievements:'}
+                                </div>
+                                <div style={{
+                                    display: 'flex',
+                                    gap: 'var(--space-2)',
+                                    flexWrap: 'wrap'
+                                }}>
+                                    {getUnlockedAchievements().slice(0, 5).map(achId => {
+                                        const ach = Object.values(ACHIEVEMENTS).find(a => a.id === achId)
+                                        if (!ach) return null
+                                        return (
+                                            <div
+                                                key={achId}
+                                                style={{
+                                                    fontSize: '1.5rem',
+                                                    title: language === 'ar' ? ach.name.ar : ach.name.en
+                                                }}
+                                            >
+                                                {ach.icon}
+                                            </div>
+                                        )
+                                    })}
+                                    {getUnlockedAchievements().length > 5 && (
+                                        <div style={{
+                                            fontSize: 'var(--font-size-sm)',
+                                            color: 'var(--color-text-tertiary)',
+                                            display: 'flex',
+                                            alignItems: 'center'
+                                        }}>
+                                            +{getUnlockedAchievements().length - 5}
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                )}
+
+                {/* Quick Links */}
+                <div style={{
+                    display: 'grid',
+                    gridTemplateColumns: 'repeat(2, 1fr)',
+                    gap: 'var(--space-4)',
+                    marginTop: 'var(--space-4)'
+                }}>
+                    <a
+                        href="/achievements"
+                        className="card animate-slideUp"
+                        style={{
+                            textDecoration: 'none',
+                            borderInlineStart: '4px solid var(--color-warning)',
+                            textAlign: 'center'
+                        }}
+                    >
+                        <span style={{ fontSize: '2rem' }}>🏆</span>
+                        <h4 style={{ marginTop: 'var(--space-2)', marginBottom: 'var(--space-1)' }}>
+                            {language === 'ar' ? 'الإنجازات' : 'Achievements'}
+                        </h4>
+                        <p style={{
+                            fontSize: 'var(--font-size-sm)',
+                            color: 'var(--color-text-tertiary)',
+                            margin: 0
+                        }}>
+                            {language === 'ar' ? 'عرض جميع الإنجازات' : 'View all achievements'}
+                        </p>
+                    </a>
+                    <a
+                        href="/progress"
+                        className="card animate-slideUp"
+                        style={{
+                            textDecoration: 'none',
+                            borderInlineStart: '4px solid var(--color-accent)',
+                            textAlign: 'center'
+                        }}
+                    >
+                        <span style={{ fontSize: '2rem' }}>📊</span>
+                        <h4 style={{ marginTop: 'var(--space-2)', marginBottom: 'var(--space-1)' }}>
+                            {language === 'ar' ? 'التقدم' : 'Progress'}
+                        </h4>
+                        <p style={{
+                            fontSize: 'var(--font-size-sm)',
+                            color: 'var(--color-text-tertiary)',
+                            margin: 0
+                        }}>
+                            {language === 'ar' ? 'عرض الإحصائيات' : 'View statistics'}
+                        </p>
+                    </a>
                 </div>
 
                 {/* Quick Actions Grid */}
