@@ -6,13 +6,26 @@ A bilingual (Arabic/English) Progressive Web App designed to educate the public 
 
 ## 🌟 Features
 
-- **🏠 Home** - Daily AMR tips with rotating educational facts
+### Core Features
+- **🏠 Home** - Daily AMR tips with rotating educational facts, progress dashboard, and daily challenges
 - **🎮 Interactive Quiz** - Test your knowledge with 100+ scenario-based questions across 16 categories
-- **� Awareness Center** - Educational content about AMR, Yemen-specific statistics, and shareable facts
+  - Category-based quiz selection
+  - Progress tracking and statistics
+  - Share quiz results
+- **📚 Awareness Center** - Educational content about AMR, Yemen-specific statistics, and shareable facts
 - **🖼️ Media Gallery** - Educational infographics, podcasts, and video content
 - **⚙️ Settings** - Language toggle (Arabic/English) and theme selection (Light/Dark/System)
 - **🌐 Bilingual** - Full Arabic and English support with RTL layout
 - **📱 PWA** - Install on any device for offline access
+
+### Gamification Features 🎯
+- **📊 Progress Tracking** - Track your quiz history, accuracy, and improvement over time
+- **🏆 Achievement System** - Unlock 20+ badges and achievements as you learn
+- **🔥 Streak Counter** - Maintain daily streaks to stay engaged
+- **📅 Daily Challenge** - Complete one question per day to build consistent learning habits
+- **📈 Progress Charts** - Visualize your progress with interactive charts and statistics
+- **🎖️ Achievement Gallery** - View all achievements, track progress, and share your accomplishments
+- **⌨️ Keyboard Shortcuts** - Quick navigation with Alt/Cmd + number keys
 
 ## 🛠️ Tech Stack
 
