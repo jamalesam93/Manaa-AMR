@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { useApp } from '../contexts/AppContext'
 import { getStatistics } from '../utils/progressTracker'
 import { getStreakInfo } from '../utils/streakTracker'
-import { getUnlockedAchievements, ACHIEVEMENTS } from '../utils/achievements'
+import { getUnlockedAchievements, getAchievementById } from '../utils/achievements'
 import DailyChallenge from '../components/gamification/DailyChallenge'
 
 // AMR Awareness Facts - bilingual
@@ -47,11 +47,13 @@ export default function HomePage() {
     const [isVisible, setIsVisible] = useState(true)
     const [stats, setStats] = useState(null)
     const [streak, setStreak] = useState(null)
+    const [unlockedAchievements, setUnlockedAchievements] = useState([])
     
     // Load progress data
     useEffect(() => {
         setStats(getStatistics())
         setStreak(getStreakInfo())
+        setUnlockedAchievements(getUnlockedAchievements())
     }, [])
 
     // Rotate facts every 10 seconds with fade effect
@@ -191,7 +193,7 @@ export default function HomePage() {
                                 </div>
                             </div>
                         </div>
-                        {getUnlockedAchievements().length > 0 && (
+                        {unlockedAchievements.length > 0 && (
                             <div style={{
                                 paddingTop: 'var(--space-4)',
                                 borderTop: '1px solid var(--color-border-light)'
@@ -208,8 +210,8 @@ export default function HomePage() {
                                     gap: 'var(--space-2)',
                                     flexWrap: 'wrap'
                                 }}>
-                                    {getUnlockedAchievements().slice(0, 5).map(achId => {
-                                        const ach = Object.values(ACHIEVEMENTS).find(a => a.id === achId)
+                                    {unlockedAchievements.slice(0, 5).map(achId => {
+                                        const ach = getAchievementById(achId)
                                         if (!ach) return null
                                         return (
                                             <div
@@ -223,14 +225,14 @@ export default function HomePage() {
                                             </div>
                                         )
                                     })}
-                                    {getUnlockedAchievements().length > 5 && (
+                                    {unlockedAchievements.length > 5 && (
                                         <div style={{
                                             fontSize: 'var(--font-size-sm)',
                                             color: 'var(--color-text-tertiary)',
                                             display: 'flex',
                                             alignItems: 'center'
                                         }}>
-                                            +{getUnlockedAchievements().length - 5}
+                                            +{unlockedAchievements.length - 5}
                                         </div>
                                     )}
                                 </div>

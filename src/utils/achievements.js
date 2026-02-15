@@ -138,6 +138,11 @@ export const ACHIEVEMENTS = {
     }
 }
 
+export const ACHIEVEMENTS_BY_ID = Object.values(ACHIEVEMENTS).reduce((acc, ach) => {
+    acc[ach.id] = ach
+    return acc
+}, {})
+
 export function getUnlockedAchievements() {
     try {
         const stored = localStorage.getItem(STORAGE_KEY)
@@ -201,6 +206,6 @@ export function checkAchievements(progress, streak, language = 'en', dailyChalle
 }
 
 export function getAchievementById(id) {
-    return ACHIEVEMENTS[id] || null
+    return ACHIEVEMENTS_BY_ID[id] || null
 }
 
