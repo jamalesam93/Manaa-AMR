@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useApp } from '../contexts/AppContext'
+import { showToast } from '../utils/toastUtils'
 
 // Text-based educational content
 const INFOGRAPHICS = [
@@ -67,7 +68,7 @@ export default function AwarenessPage() {
             navigator.share({ text })
         } else {
             navigator.clipboard.writeText(text)
-            alert(language === 'ar' ? 'تم نسخ النص!' : 'Text copied!')
+            showToast(language === 'ar' ? 'تم نسخ النص!' : 'Text copied!')
         }
     }
 

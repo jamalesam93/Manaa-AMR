@@ -4,6 +4,7 @@ import { AppProvider, useApp } from './contexts/AppContext'
 import BottomNav from './components/layout/BottomNav'
 import EmergencyScreen from './components/feedback/EmergencyScreen'
 import ErrorBoundary from './components/feedback/ErrorBoundary'
+import Toast from './components/feedback/Toast'
 import { setupKeyboardShortcuts } from './utils/keyboardShortcuts'
 
 // Lazy load pages for code splitting
@@ -75,6 +76,7 @@ function AppContent() {
         </Suspense>
 
         <BottomNav />
+        <Toast />
       </div>
     </ErrorBoundary>
   )

@@ -1,4 +1,5 @@
 // Social sharing utilities
+import { showToast } from './toastUtils'
 
 export function shareQuizResult(score, total, percentage, language) {
     const messages = {
@@ -51,11 +52,10 @@ export function shareQuizResult(score, total, percentage, language) {
 function copyToClipboard(text, language) {
     navigator.clipboard.writeText(text).then(() => {
         const message = language === 'ar' ? 'تم نسخ النص!' : 'Text copied to clipboard!'
-        // You could show a toast notification here
-        alert(message)
+        showToast(message)
     }).catch(err => {
         console.error('Failed to copy:', err)
-        alert(language === 'ar' ? 'فشل النسخ' : 'Failed to copy')
+        showToast(language === 'ar' ? 'فشل النسخ' : 'Failed to copy', 'error')
     })
 }
 
