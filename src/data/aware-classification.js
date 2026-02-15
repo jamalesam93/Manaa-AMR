@@ -114,6 +114,7 @@ export const NOT_RECOMMENDED_COMBINATIONS = [
 
 // Helper function to get AWaRe category for an antibiotic
 export function getAWaReCategory(antibioticName) {
+    if (!antibioticName) return null
     const lower = antibioticName.toLowerCase()
     const found = AWARE_ANTIBIOTICS.find(a => a.name.toLowerCase().includes(lower) || lower.includes(a.name.toLowerCase()))
     return found ? found.category : null
