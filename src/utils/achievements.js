@@ -2,6 +2,8 @@
 
 const STORAGE_KEY = 'manaa_achievements'
 
+const DEFAULT_ACHIEVEMENTS = []
+
 export const ACHIEVEMENTS = {
     FIRST_QUIZ: {
         id: 'first_quiz',
@@ -141,10 +143,10 @@ export const ACHIEVEMENTS = {
 export function getUnlockedAchievements() {
     try {
         const stored = localStorage.getItem(STORAGE_KEY)
-        return stored ? JSON.parse(stored) : []
+        return stored ? JSON.parse(stored) : [...DEFAULT_ACHIEVEMENTS]
     } catch (error) {
         console.error('Error loading achievements:', error)
-        return []
+        return [...DEFAULT_ACHIEVEMENTS]
     }
 }
 

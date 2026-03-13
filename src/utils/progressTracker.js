@@ -2,32 +2,32 @@
 
 const STORAGE_KEY = 'manaa_quizProgress'
 
+const DEFAULT_PROGRESS_DATA = {
+    totalQuizzes: 0,
+    totalQuestions: 0,
+    correctAnswers: 0,
+    quizHistory: [],
+    bestScore: 0,
+    averageScore: 0,
+    categoriesPlayed: {},
+    lastQuizDate: null,
+    perfectQuizzes: 0
+}
+
 export function getProgressData() {
     try {
         const stored = localStorage.getItem(STORAGE_KEY)
         return stored ? JSON.parse(stored) : {
-            totalQuizzes: 0,
-            totalQuestions: 0,
-            correctAnswers: 0,
+            ...DEFAULT_PROGRESS_DATA,
             quizHistory: [],
-            bestScore: 0,
-            averageScore: 0,
-            categoriesPlayed: {},
-            lastQuizDate: null,
-            perfectQuizzes: 0
+            categoriesPlayed: {}
         }
     } catch (error) {
         console.error('Error loading progress:', error)
         return {
-            totalQuizzes: 0,
-            totalQuestions: 0,
-            correctAnswers: 0,
+            ...DEFAULT_PROGRESS_DATA,
             quizHistory: [],
-            bestScore: 0,
-            averageScore: 0,
-            categoriesPlayed: {},
-            lastQuizDate: null,
-            perfectQuizzes: 0
+            categoriesPlayed: {}
         }
     }
 }

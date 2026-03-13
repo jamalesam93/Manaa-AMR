@@ -2,6 +2,13 @@
 
 const STORAGE_KEY = 'manaa_dailyChallenge'
 
+const INITIAL_CHALLENGE_STATS = {
+    totalCompleted: 0,
+    currentStreak: 0,
+    longestStreak: 0,
+    lastCompletedDate: null
+}
+
 export function getDailyChallenge() {
     const today = new Date().toISOString().split('T')[0] // YYYY-MM-DD
     const stored = localStorage.getItem(STORAGE_KEY)
@@ -42,12 +49,7 @@ export function setDailyChallenge(scenario, userAnswer, isCorrect) {
 export function getDailyChallengeStats() {
     const stored = localStorage.getItem(STORAGE_KEY)
     if (!stored) {
-        return {
-            totalCompleted: 0,
-            currentStreak: 0,
-            longestStreak: 0,
-            lastCompletedDate: null
-        }
+        return { ...INITIAL_CHALLENGE_STATS }
     }
     
     // For now, we'll track basic stats
