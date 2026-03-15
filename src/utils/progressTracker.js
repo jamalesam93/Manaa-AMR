@@ -17,7 +17,9 @@ export function getProgressData() {
             perfectQuizzes: 0
         }
     } catch (error) {
-        console.error('Error loading progress:', error)
+        if (import.meta.env.DEV) {
+            console.error('Error loading progress:', error)
+        }
         return {
             totalQuizzes: 0,
             totalQuestions: 0,
@@ -83,7 +85,9 @@ export function saveQuizResult(quizData) {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(progress))
         return progress
     } catch (error) {
-        console.error('Error saving progress:', error)
+        if (import.meta.env.DEV) {
+            console.error('Error saving progress:', error)
+        }
         return progress
     }
 }
@@ -112,7 +116,9 @@ export function clearProgress() {
         localStorage.removeItem(STORAGE_KEY)
         return true
     } catch (error) {
-        console.error('Error clearing progress:', error)
+        if (import.meta.env.DEV) {
+            console.error('Error clearing progress:', error)
+        }
         return false
     }
 }
