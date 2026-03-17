@@ -42,7 +42,17 @@ export function AppProvider({ children }) {
     // Family profiles
     const [familyProfiles, setFamilyProfiles] = useState(() => {
         const saved = localStorage.getItem('manaa_familyProfiles')
-        return saved ? JSON.parse(saved) : []
+        if (!saved) return []
+
+        try {
+            const parsed = JSON.parse(saved)
+            return Array.isArray(parsed) ? parsed : []
+        } catch (error) {
+            if (import.meta.env.DEV) {
+                console.error('Failed to parse family profiles from localStorage:', error)
+            }
+            return []
+        }
     })
 
     // Active family profile
