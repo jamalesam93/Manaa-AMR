@@ -1,0 +1,5 @@
+## 2025-03-23 - Insecure Deserialization in Local Storage Access
+
+**Vulnerability:** The application blindly parses `localStorage` items using `JSON.parse` across several utility files (e.g., `src/utils/dailyChallenge.js`, `src/contexts/AppContext.jsx`) without utilizing a `try-catch` block or verifying the object's schema type. This leaves the app vulnerable to client-side insecure deserialization/prototype pollution issues and possible unhandled exception crashes.
+**Learning:** This architectural security gap means unvalidated data structures injected into storage can directly alter application behavior or crash the client. Because there's no runtime type safety, assuming `JSON.parse()` output perfectly matches structural expectations leads to missing properties errors.
+**Prevention:** All `JSON.parse` usage over uncontrolled data stores must be encapsulated within a `try-catch` block and perform strict type validation (e.g. validating `typeof data === 'object' && !Array.isArray(data)`) to ensure safe processing.
