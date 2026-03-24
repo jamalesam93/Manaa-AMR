@@ -3,19 +3,31 @@
 const STORAGE_KEY = 'manaa_dailyChallenge'
 
 export function getDailyChallenge() {
-    const today = new Date().toISOString().split('T')[0] // YYYY-MM-DD
-    const stored = localStorage.getItem(STORAGE_KEY)
-    
-    if (stored) {
-        const data = JSON.parse(stored)
+    try {
+        const today = new Date().toISOString().split('T')[0] // YYYY-MM-DD
+        const stored = localStorage.getItem(STORAGE_KEY)
+
+        if (!stored) return null;
+
+        const data = JSON.parse(stored);
+
+        // Strict validation to prevent insecure deserialization
+        if (!data || typeof data !== 'object' || Array.isArray(data)) {
+            return null;
+        }
+
         // If we have today's challenge, return it
         if (data.date === today) {
-            return data
+            return data;
         }
+
+        return null;
+    } catch (error) {
+        if (import.meta.env.DEV) {
+            console.error('Error loading daily challenge:', error);
+        }
+        return null;
     }
-    
-    // No challenge for today, return null
-    return null
 }
 
 export function setDailyChallenge(scenario, userAnswer, isCorrect) {
@@ -34,33 +46,47 @@ export function setDailyChallenge(scenario, userAnswer, isCorrect) {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(challengeData))
         return challengeData
     } catch (error) {
-        console.error('Error saving daily challenge:', error)
+        if (import.meta.env.DEV) {
+            console.error('Error saving daily challenge:', error)
+        }
         return null
     }
 }
 
 export function getDailyChallengeStats() {
-    const stored = localStorage.getItem(STORAGE_KEY)
-    if (!stored) {
-        return {
-            totalCompleted: 0,
-            currentStreak: 0,
-            longestStreak: 0,
-            lastCompletedDate: null
+    const defaultStats = {
+        totalCompleted: 0,
+        currentStreak: 0,
+        longestStreak: 0,
+        lastCompletedDate: null,
+        todayCompleted: false
+    };
+
+    try {
+        const stored = localStorage.getItem(STORAGE_KEY)
+        if (!stored) return { ...defaultStats };
+
+        const data = JSON.parse(stored);
+
+        // Strict validation to prevent insecure deserialization
+        if (!data || typeof data !== 'object' || Array.isArray(data)) {
+            return { ...defaultStats };
         }
-    }
-    
-    // For now, we'll track basic stats
-    // In a full implementation, you'd store an array of all completed challenges
-    const data = JSON.parse(stored)
-    const today = new Date().toISOString().split('T')[0]
-    
-    return {
-        totalCompleted: data.completed ? 1 : 0,
-        currentStreak: data.date === today && data.completed ? 1 : 0,
-        longestStreak: data.completed ? 1 : 0,
-        lastCompletedDate: data.completed ? data.date : null,
-        todayCompleted: data.date === today && data.completed
+
+        const today = new Date().toISOString().split('T')[0];
+
+        return {
+            totalCompleted: data.completed ? 1 : 0,
+            currentStreak: (data.date === today && data.completed) ? 1 : 0,
+            longestStreak: data.completed ? 1 : 0,
+            lastCompletedDate: (data.completed && typeof data.date === 'string') ? data.date : null,
+            todayCompleted: data.date === today && !!data.completed
+        };
+    } catch (error) {
+        if (import.meta.env.DEV) {
+            console.error('Error loading daily challenge stats:', error);
+        }
+        return { ...defaultStats };
     }
 }
 

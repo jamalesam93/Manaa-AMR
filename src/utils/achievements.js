@@ -140,11 +140,23 @@ export const ACHIEVEMENTS = {
 
 export function getUnlockedAchievements() {
     try {
-        const stored = localStorage.getItem(STORAGE_KEY)
-        return stored ? JSON.parse(stored) : []
+        const stored = localStorage.getItem(STORAGE_KEY);
+        if (!stored) return [];
+
+        const parsed = JSON.parse(stored);
+
+        // Strict validation to prevent insecure deserialization
+        if (!Array.isArray(parsed)) {
+            return [];
+        }
+
+        // Ensure all elements are strings (achievement IDs)
+        return parsed.filter(item => typeof item === 'string');
     } catch (error) {
-        console.error('Error loading achievements:', error)
-        return []
+        if (import.meta.env.DEV) {
+            console.error('Error loading achievements:', error);
+        }
+        return [];
     }
 }
 
@@ -184,7 +196,9 @@ export function checkAchievements(progress, streak, language = 'en', dailyChalle
         try {
             localStorage.setItem(STORAGE_KEY, JSON.stringify(unlocked))
         } catch (error) {
-            console.error('Error saving achievements:', error)
+            if (import.meta.env.DEV) {
+                console.error('Error saving achievements:', error)
+            }
         }
     }
 

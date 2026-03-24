@@ -3,32 +3,46 @@
 const STORAGE_KEY = 'manaa_quizProgress'
 
 export function getProgressData() {
+    const defaultData = {
+        totalQuizzes: 0,
+        totalQuestions: 0,
+        correctAnswers: 0,
+        quizHistory: [],
+        bestScore: 0,
+        averageScore: 0,
+        categoriesPlayed: {},
+        lastQuizDate: null,
+        perfectQuizzes: 0
+    };
+
     try {
-        const stored = localStorage.getItem(STORAGE_KEY)
-        return stored ? JSON.parse(stored) : {
-            totalQuizzes: 0,
-            totalQuestions: 0,
-            correctAnswers: 0,
-            quizHistory: [],
-            bestScore: 0,
-            averageScore: 0,
-            categoriesPlayed: {},
-            lastQuizDate: null,
-            perfectQuizzes: 0
+        const stored = localStorage.getItem(STORAGE_KEY);
+        if (!stored) return { ...defaultData };
+
+        const parsed = JSON.parse(stored);
+
+        // Strict validation to prevent insecure deserialization
+        if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) {
+            return { ...defaultData };
         }
-    } catch (error) {
-        console.error('Error loading progress:', error)
+
         return {
-            totalQuizzes: 0,
-            totalQuestions: 0,
-            correctAnswers: 0,
-            quizHistory: [],
-            bestScore: 0,
-            averageScore: 0,
-            categoriesPlayed: {},
-            lastQuizDate: null,
-            perfectQuizzes: 0
+            totalQuizzes: typeof parsed.totalQuizzes === 'number' ? parsed.totalQuizzes : 0,
+            totalQuestions: typeof parsed.totalQuestions === 'number' ? parsed.totalQuestions : 0,
+            correctAnswers: typeof parsed.correctAnswers === 'number' ? parsed.correctAnswers : 0,
+            quizHistory: Array.isArray(parsed.quizHistory) ? parsed.quizHistory : [],
+            bestScore: typeof parsed.bestScore === 'number' ? parsed.bestScore : 0,
+            averageScore: typeof parsed.averageScore === 'number' ? parsed.averageScore : 0,
+            categoriesPlayed: (parsed.categoriesPlayed && typeof parsed.categoriesPlayed === 'object' && !Array.isArray(parsed.categoriesPlayed))
+                ? parsed.categoriesPlayed : {},
+            lastQuizDate: typeof parsed.lastQuizDate === 'string' ? parsed.lastQuizDate : null,
+            perfectQuizzes: typeof parsed.perfectQuizzes === 'number' ? parsed.perfectQuizzes : 0
+        };
+    } catch (error) {
+        if (import.meta.env.DEV) {
+            console.error('Error loading progress:', error);
         }
+        return { ...defaultData };
     }
 }
 
@@ -83,7 +97,9 @@ export function saveQuizResult(quizData) {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(progress))
         return progress
     } catch (error) {
-        console.error('Error saving progress:', error)
+        if (import.meta.env.DEV) {
+            console.error('Error saving progress:', error)
+        }
         return progress
     }
 }
@@ -112,7 +128,9 @@ export function clearProgress() {
         localStorage.removeItem(STORAGE_KEY)
         return true
     } catch (error) {
-        console.error('Error clearing progress:', error)
+        if (import.meta.env.DEV) {
+            console.error('Error clearing progress:', error)
+        }
         return false
     }
 }
