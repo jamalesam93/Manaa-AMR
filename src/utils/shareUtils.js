@@ -54,7 +54,7 @@ function copyToClipboard(text, language) {
         // You could show a toast notification here
         alert(message)
     }).catch(err => {
-        console.error('Failed to copy:', err)
+        if (import.meta.env.DEV) console.error('Failed to copy:', err)
         alert(language === 'ar' ? 'فشل النسخ' : 'Failed to copy')
     })
 }

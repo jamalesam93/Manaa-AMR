@@ -34,7 +34,7 @@ export function setDailyChallenge(scenario, userAnswer, isCorrect) {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(challengeData))
         return challengeData
     } catch (error) {
-        console.error('Error saving daily challenge:', error)
+        if (import.meta.env.DEV) console.error('Error saving daily challenge:', error)
         return null
     }
 }

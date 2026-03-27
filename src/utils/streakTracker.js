@@ -12,7 +12,7 @@ export function getStreakData() {
             totalDaysActive: 0
         }
     } catch (error) {
-        console.error('Error loading streak data:', error)
+        if (import.meta.env.DEV) console.error('Error loading streak data:', error)
         return {
             currentStreak: 0,
             longestStreak: 0,
@@ -73,7 +73,7 @@ export function updateStreak() {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(streakData))
         return streakData
     } catch (error) {
-        console.error('Error saving streak:', error)
+        if (import.meta.env.DEV) console.error('Error saving streak:', error)
         return streakData
     }
 }
