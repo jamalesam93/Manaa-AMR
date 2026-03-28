@@ -11,7 +11,7 @@ class ErrorBoundaryClass extends React.Component {
     }
 
     componentDidCatch(error, errorInfo) {
-        console.error('Error caught by boundary:', error, errorInfo)
+        if (import.meta.env.DEV) console.error('Error caught by boundary:', error, errorInfo)
     }
 
     handleReset = () => {
@@ -49,7 +49,7 @@ function ErrorFallback({ error, onReset, language }) {
                     ? 'نعتذر، حدث خطأ غير متوقع. يرجى المحاولة مرة أخرى.'
                     : 'We apologize, an unexpected error occurred. Please try again.'}
             </p>
-            {process.env.NODE_ENV === 'development' && error && (
+            {import.meta.env.DEV && error && (
                 <details style={{
                     marginBottom: 'var(--space-4)',
                     padding: 'var(--space-4)',
