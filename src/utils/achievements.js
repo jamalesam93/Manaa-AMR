@@ -143,7 +143,9 @@ export function getUnlockedAchievements() {
         const stored = localStorage.getItem(STORAGE_KEY)
         return stored ? JSON.parse(stored) : []
     } catch (error) {
-        console.error('Error loading achievements:', error)
+        if (import.meta.env.DEV) {
+            console.error('Error loading achievements:', error)
+        }
         return []
     }
 }
@@ -184,7 +186,9 @@ export function checkAchievements(progress, streak, language = 'en', dailyChalle
         try {
             localStorage.setItem(STORAGE_KEY, JSON.stringify(unlocked))
         } catch (error) {
-            console.error('Error saving achievements:', error)
+            if (import.meta.env.DEV) {
+                console.error('Error saving achievements:', error)
+            }
         }
     }
 
