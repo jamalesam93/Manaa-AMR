@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useApp } from '../../contexts/AppContext'
+import { isSafeUrl } from '../../utils/security'
 
 /**
  * ImageGallery component for displaying infographics and images
@@ -51,6 +52,12 @@ export default function ImageGallery({ images = [] }) {
     }
 
     const handleDownload = (image) => {
+        // Prevent DOM XSS via malicious URIs (e.g. javascript:)
+        if (!isSafeUrl(image.src)) {
+            console.error('Download blocked: Unsafe URL detected');
+            return;
+        }
+
         const link = document.createElement('a')
         link.href = image.src
         link.download = image.src.split('/').pop() || 'infographic'
