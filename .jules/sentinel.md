@@ -1,0 +1,4 @@
+## 2024-05-18 - [DOM-based XSS via Dynamic Download Links]
+**Vulnerability:** Unsanitized URLs assigned to the `href` attribute of dynamically created `<a>` tags for downloading media/images.
+**Learning:** React components (e.g. `MediaPlayer`, `ImageGallery`) generating download links programmatically can be exploited for DOM-based XSS if the `src` URL begins with `javascript:` or `data:text/html`. Although React protects against XSS in JSX rendering, directly manipulating DOM elements like `document.createElement('a')` bypasses this protection.
+**Prevention:** Implement and enforce a strict URL validation utility (`isSafeUrl`) before assigning dynamically generated URLs to the `href` or `src` attributes of DOM nodes. Ensure `console.error` logs of security blocking are hidden in production to prevent leakage.
