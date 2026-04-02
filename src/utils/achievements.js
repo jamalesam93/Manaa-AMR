@@ -141,9 +141,15 @@ export const ACHIEVEMENTS = {
 export function getUnlockedAchievements() {
     try {
         const stored = localStorage.getItem(STORAGE_KEY)
-        return stored ? JSON.parse(stored) : []
-    } catch (error) {
-        console.error('Error loading achievements:', error)
+        if (stored) {
+            const parsed = JSON.parse(stored)
+            return Array.isArray(parsed) ? parsed : []
+        }
+        return []
+    } catch {
+        if (import.meta.env.DEV) {
+            console.error('Error loading achievements from localStorage')
+        }
         return []
     }
 }

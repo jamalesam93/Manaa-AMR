@@ -3,22 +3,27 @@
 const STORAGE_KEY = 'manaa_streakData'
 
 export function getStreakData() {
+    const defaultData = {
+        currentStreak: 0,
+        longestStreak: 0,
+        lastActivityDate: null,
+        totalDaysActive: 0
+    }
+
     try {
         const stored = localStorage.getItem(STORAGE_KEY)
-        return stored ? JSON.parse(stored) : {
-            currentStreak: 0,
-            longestStreak: 0,
-            lastActivityDate: null,
-            totalDaysActive: 0
+        if (stored) {
+            const parsed = JSON.parse(stored)
+            if (parsed && typeof parsed === 'object') {
+                return parsed
+            }
         }
-    } catch (error) {
-        console.error('Error loading streak data:', error)
-        return {
-            currentStreak: 0,
-            longestStreak: 0,
-            lastActivityDate: null,
-            totalDaysActive: 0
+        return { ...defaultData }
+    } catch {
+        if (import.meta.env.DEV) {
+            console.error('Error loading streak data from localStorage')
         }
+        return { ...defaultData }
     }
 }
 
