@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useApp } from '../../contexts/AppContext'
+import { isSafeUrl } from '../../utils/security.js'
 
 /**
  * ImageGallery component for displaying infographics and images
@@ -51,6 +52,7 @@ export default function ImageGallery({ images = [] }) {
     }
 
     const handleDownload = (image) => {
+        if (!isSafeUrl(image.src)) return
         const link = document.createElement('a')
         link.href = image.src
         link.download = image.src.split('/').pop() || 'infographic'
@@ -80,11 +82,13 @@ export default function ImageGallery({ images = [] }) {
                         tabIndex={0}
                         onKeyDown={(e) => e.key === 'Enter' && handleImageClick(image)}
                     >
-                        <img
-                            src={image.src}
-                            alt={language === 'ar' ? image.titleAr : image.titleEn}
-                            loading="lazy"
-                        />
+                        {isSafeUrl(image.src) && (
+                            <img
+                                src={image.src}
+                                alt={language === 'ar' ? image.titleAr : image.titleEn}
+                                loading="lazy"
+                            />
+                        )}
                         <div className="image-gallery__overlay">
                             <span className="image-gallery__zoom-icon">🔍</span>
                         </div>
@@ -156,16 +160,18 @@ export default function ImageGallery({ images = [] }) {
 
                         {/* Scrollable Image Container */}
                         <div className="lightbox__image-container">
-                            <img
-                                src={selectedImage.src}
-                                alt={language === 'ar' ? selectedImage.titleAr : selectedImage.titleEn}
-                                className="lightbox__image"
-                                style={{
-                                    transform: `scale(${zoomLevel / 100})`,
-                                    transformOrigin: 'center center',
-                                    transition: 'transform 0.2s ease'
-                                }}
-                            />
+                            {isSafeUrl(selectedImage.src) && (
+                                <img
+                                    src={selectedImage.src}
+                                    alt={language === 'ar' ? selectedImage.titleAr : selectedImage.titleEn}
+                                    className="lightbox__image"
+                                    style={{
+                                        transform: `scale(${zoomLevel / 100})`,
+                                        transformOrigin: 'center center',
+                                        transition: 'transform 0.2s ease'
+                                    }}
+                                />
+                            )}
                         </div>
 
                         {/* Caption/Footer */}

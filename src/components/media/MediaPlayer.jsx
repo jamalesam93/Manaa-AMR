@@ -1,5 +1,6 @@
 import { useState, useRef } from 'react'
 import { useApp } from '../../contexts/AppContext'
+import { isSafeUrl } from '../../utils/security.js'
 
 /**
  * Reusable MediaPlayer component for video and audio playback
@@ -13,7 +14,7 @@ export default function MediaPlayer({
     description,
     downloadable = true
 }) {
-    const { t, language } = useApp()
+    const { language } = useApp()
     const mediaRef = useRef(null)
     const [isPlaying, setIsPlaying] = useState(false)
     const [progress, setProgress] = useState(0)
@@ -78,6 +79,7 @@ export default function MediaPlayer({
     }
 
     const handleDownload = () => {
+        if (!isSafeUrl(src)) return
         const link = document.createElement('a')
         link.href = src
         link.download = src.split('/').pop() || 'media-file'
@@ -110,17 +112,19 @@ export default function MediaPlayer({
             {/* Video Element */}
             {type === 'video' && (
                 <div className="media-player__video-container">
-                    <video
-                        ref={mediaRef}
-                        src={src}
-                        poster={poster}
-                        onTimeUpdate={handleTimeUpdate}
-                        onLoadedMetadata={handleLoadedMetadata}
-                        onEnded={handleEnded}
-                        onError={handleError}
-                        onClick={togglePlay}
-                        playsInline
-                    />
+                    {isSafeUrl(src) && (
+                        <video
+                            ref={mediaRef}
+                            src={src}
+                            poster={poster}
+                            onTimeUpdate={handleTimeUpdate}
+                            onLoadedMetadata={handleLoadedMetadata}
+                            onEnded={handleEnded}
+                            onError={handleError}
+                            onClick={togglePlay}
+                            playsInline
+                        />
+                    )}
                     {!isPlaying && (
                         <button
                             className="media-player__play-overlay"
@@ -136,19 +140,21 @@ export default function MediaPlayer({
             {/* Audio Element - Using native controls for reliable seeking */}
             {type === 'audio' && (
                 <div className="media-player__audio-container media-player__audio-native">
-                    <audio
-                        ref={mediaRef}
-                        src={src}
-                        controls
-                        preload="auto"
-                        onTimeUpdate={handleTimeUpdate}
-                        onLoadedMetadata={handleLoadedMetadata}
-                        onEnded={handleEnded}
-                        onError={handleError}
-                        onPlay={() => setIsPlaying(true)}
-                        onPause={() => setIsPlaying(false)}
-                        style={{ width: '100%', borderRadius: 'var(--radius-lg)' }}
-                    />
+                    {isSafeUrl(src) && (
+                        <audio
+                            ref={mediaRef}
+                            src={src}
+                            controls
+                            preload="auto"
+                            onTimeUpdate={handleTimeUpdate}
+                            onLoadedMetadata={handleLoadedMetadata}
+                            onEnded={handleEnded}
+                            onError={handleError}
+                            onPlay={() => setIsPlaying(true)}
+                            onPause={() => setIsPlaying(false)}
+                            style={{ width: '100%', borderRadius: 'var(--radius-lg)' }}
+                        />
+                    )}
                 </div>
             )}
 
