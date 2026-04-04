@@ -1,0 +1,4 @@
+## 2025-04-04 - [DOM-based XSS in Dynamic Download Links]
+**Vulnerability:** The application was assigning unsanitized dynamic URLs directly to `href` attributes in programmatically created `<a>` elements for download functionality (in `MediaPlayer` and `ImageGallery`).
+**Learning:** Even internal or semi-trusted data must be validated before being used in sinks that could execute JavaScript, such as an `href` attribute taking a `javascript:` or `vbscript:` URI. Directly assigning `src` props to `.href` allows DOM-based XSS if the data source is compromised or if an attacker can inject malicious URLs.
+**Prevention:** Always validate URLs against safe protocol schemes (e.g., `http:`, `https:`, `mailto:`, safe `data:`) before using them in dynamic attributes that act as execution sinks. A reusable `isSafeUrl` utility was added to enforce this check across the application.
