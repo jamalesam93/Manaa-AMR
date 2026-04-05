@@ -1,0 +1,4 @@
+## 2024-05-18 - Validate Download URLs to Prevent DOM XSS
+**Vulnerability:** The application was vulnerable to DOM-based Cross-Site Scripting (XSS) due to dynamic unvalidated assignments of URLs containing `javascript:` URIs to `a.href` tags in download logic (specifically in `MediaPlayer` and `ImageGallery`).
+**Learning:** Even internal or semi-trusted data rendered directly into a link's `href` or `src` attribute could lead to arbitrary JavaScript execution if manipulated by a malicious actor or if user content isn't properly sanitized upstream.
+**Prevention:** Always validate all dynamic URL assignments (especially `href` and `src` attributes) using a robust URL validator utility. A dedicated `isSafeUrl` method ensures potentially dangerous protocols like `javascript:` or `vbscript:` are explicitly rejected prior to appending to the DOM.
