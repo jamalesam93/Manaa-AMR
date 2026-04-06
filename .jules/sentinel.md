@@ -1,0 +1,4 @@
+## 2025-05-15 - DOM-based XSS via Download Links
+**Vulnerability:** The application used dynamic assignments to `href` attributes in `document.createElement('a')` to trigger downloads in components like `MediaPlayer` and `ImageGallery` without validating the source URLs. This could allow for DOM-based Cross-Site Scripting (XSS) if a `javascript:` URI was somehow injected into the media URL source.
+**Learning:** Even internal file paths or API-driven image sources must be treated with caution when assigned to executable DOM attributes like `href` or `src`. The browser will execute `javascript:` payloads when a user clicks a link (or when simulated via `.click()`).
+**Prevention:** All dynamic URL assignments to `href` or `src` attributes must be validated. A utility function `isSafeUrl` was introduced in `src/utils/security.js` to block dangerous protocols like `javascript:`, `vbscript:`, and `data:` using both `URL` parsing and regex fallbacks.

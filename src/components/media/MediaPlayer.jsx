@@ -1,5 +1,6 @@
 import { useState, useRef } from 'react'
 import { useApp } from '../../contexts/AppContext'
+import { isSafeUrl } from '../../utils/security'
 
 /**
  * Reusable MediaPlayer component for video and audio playback
@@ -78,6 +79,11 @@ export default function MediaPlayer({
     }
 
     const handleDownload = () => {
+        if (!isSafeUrl(src)) {
+            console.error('Security Error: Blocked potentially unsafe URL download')
+            return
+        }
+
         const link = document.createElement('a')
         link.href = src
         link.download = src.split('/').pop() || 'media-file'
