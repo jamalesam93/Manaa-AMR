@@ -1,0 +1,4 @@
+## 2025-02-28 - Prevent DOM-based XSS in download links
+**Vulnerability:** DOM-based Cross-Site Scripting (XSS) via `javascript:` URIs dynamically assigned to `href` attributes during file downloads in media/image components.
+**Learning:** React's built-in XSS protections don't cover direct DOM manipulation like `document.createElement('a')` combined with `.href = src`. A dynamically passed `src` could execute arbitrary JavaScript when the created link is clicked (e.g. `javascript:alert(1)`).
+**Prevention:** All URLs dynamically assigned to `href` or `src` attributes for direct DOM manipulation must be validated using an allowlist or parsed to ensure their protocol is safe (e.g., `http:`, `https:`, `mailto:`, blocking `javascript:`, `vbscript:`, `data:text/html`). Implemented `isSafeUrl` utility to handle this securely.
