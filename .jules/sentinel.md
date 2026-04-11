@@ -1,0 +1,4 @@
+## 2026-04-11 - [Insecure Deserialization of LocalStorage Data]
+**Vulnerability:** Unsafe calls to `JSON.parse` directly on data from `localStorage` in `src/contexts/AppContext.jsx` and `src/utils/dailyChallenge.js` without any `try-catch` blocks or schema validation.
+**Learning:** Parsing JSON from `localStorage` without validation exposes the application to unexpected errors and potential malicious payloads or schema alterations by other scripts accessing the same domain `localStorage`, resulting in the app breaking completely when assumptions about data shape (e.g., arrays or specific object keys) are violated.
+**Prevention:** All data retrieved from `localStorage` must be wrapped in `try-catch` blocks when parsing, and explicitly schema-validated (e.g., `Array.isArray(parsed)`, `typeof parsed === 'object'`) before usage. In case of invalid shapes or parsing errors, a fallback to default initial state must be utilized.
