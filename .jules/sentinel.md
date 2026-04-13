@@ -1,0 +1,4 @@
+## 2025-02-14 - Prevent Insecure Deserialization in LocalStorage
+**Vulnerability:** Insecure deserialization vulnerabilities found in `src/contexts/AppContext.jsx` and `src/utils/dailyChallenge.js` due to unprotected `JSON.parse()` on `localStorage` data without `try-catch` blocks or schema validation.
+**Learning:** `localStorage` can be tampered with by clients (e.g. via XSS or developer tools), leading to runtime crashes or unexpected object shapes during parsing, affecting components like the AppProvider and DailyChallenge utilities.
+**Prevention:** Always wrap `localStorage` parsing in a `try-catch` block and validate the deserialized data structure (e.g. `Array.isArray` or `typeof === 'object'`) before passing it into application state. Ensure `console.error` logs are wrapped in `import.meta.env.DEV` to prevent leaking internal error info in production.
