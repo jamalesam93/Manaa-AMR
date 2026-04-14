@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useApp } from '../../contexts/AppContext'
+import { getSafeUrl } from '../../utils/security.js'
 
 /**
  * ImageGallery component for displaying infographics and images
@@ -51,8 +52,11 @@ export default function ImageGallery({ images = [] }) {
     }
 
     const handleDownload = (image) => {
+        const safeSrc = getSafeUrl(image.src)
+        if (safeSrc === '#') return; // Do not download unsafe URLs
+
         const link = document.createElement('a')
-        link.href = image.src
+        link.href = safeSrc
         link.download = image.src.split('/').pop() || 'infographic'
         document.body.appendChild(link)
         link.click()
@@ -81,7 +85,7 @@ export default function ImageGallery({ images = [] }) {
                         onKeyDown={(e) => e.key === 'Enter' && handleImageClick(image)}
                     >
                         <img
-                            src={image.src}
+                            src={getSafeUrl(image.src)}
                             alt={language === 'ar' ? image.titleAr : image.titleEn}
                             loading="lazy"
                         />
@@ -157,7 +161,7 @@ export default function ImageGallery({ images = [] }) {
                         {/* Scrollable Image Container */}
                         <div className="lightbox__image-container">
                             <img
-                                src={selectedImage.src}
+                                src={getSafeUrl(selectedImage.src)}
                                 alt={language === 'ar' ? selectedImage.titleAr : selectedImage.titleEn}
                                 className="lightbox__image"
                                 style={{
