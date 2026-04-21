@@ -1,5 +1,6 @@
 import { useState, useRef } from 'react'
 import { useApp } from '../../contexts/AppContext'
+import { getSafeUrl } from '../../utils/security'
 
 /**
  * Reusable MediaPlayer component for video and audio playback
@@ -78,12 +79,15 @@ export default function MediaPlayer({
     }
 
     const handleDownload = () => {
-        const link = document.createElement('a')
-        link.href = src
-        link.download = src.split('/').pop() || 'media-file'
-        document.body.appendChild(link)
-        link.click()
-        document.body.removeChild(link)
+        const safeUrl = getSafeUrl(src);
+        if (safeUrl) {
+            const link = document.createElement('a')
+            link.href = safeUrl
+            link.download = safeUrl.split('/').pop() || 'media-file'
+            document.body.appendChild(link)
+            link.click()
+            document.body.removeChild(link)
+        }
     }
 
     if (error) {
@@ -108,11 +112,11 @@ export default function MediaPlayer({
             )}
 
             {/* Video Element */}
-            {type === 'video' && (
+            {type === 'video' && getSafeUrl(src) && (
                 <div className="media-player__video-container">
                     <video
                         ref={mediaRef}
-                        src={src}
+                        src={getSafeUrl(src)}
                         poster={poster}
                         onTimeUpdate={handleTimeUpdate}
                         onLoadedMetadata={handleLoadedMetadata}
@@ -134,11 +138,11 @@ export default function MediaPlayer({
             )}
 
             {/* Audio Element - Using native controls for reliable seeking */}
-            {type === 'audio' && (
+            {type === 'audio' && getSafeUrl(src) && (
                 <div className="media-player__audio-container media-player__audio-native">
                     <audio
                         ref={mediaRef}
-                        src={src}
+                        src={getSafeUrl(src)}
                         controls
                         preload="auto"
                         onTimeUpdate={handleTimeUpdate}

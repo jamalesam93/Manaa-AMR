@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useApp } from '../../contexts/AppContext'
+import { getSafeUrl } from '../../utils/security'
 
 /**
  * ImageGallery component for displaying infographics and images
@@ -51,12 +52,15 @@ export default function ImageGallery({ images = [] }) {
     }
 
     const handleDownload = (image) => {
-        const link = document.createElement('a')
-        link.href = image.src
-        link.download = image.src.split('/').pop() || 'infographic'
-        document.body.appendChild(link)
-        link.click()
-        document.body.removeChild(link)
+        const safeUrl = getSafeUrl(image.src);
+        if (safeUrl) {
+            const link = document.createElement('a')
+            link.href = safeUrl
+            link.download = safeUrl.split('/').pop() || 'infographic'
+            document.body.appendChild(link)
+            link.click()
+            document.body.removeChild(link)
+        }
     }
 
     if (!images.length) {
@@ -80,11 +84,13 @@ export default function ImageGallery({ images = [] }) {
                         tabIndex={0}
                         onKeyDown={(e) => e.key === 'Enter' && handleImageClick(image)}
                     >
-                        <img
-                            src={image.src}
-                            alt={language === 'ar' ? image.titleAr : image.titleEn}
-                            loading="lazy"
-                        />
+                        {getSafeUrl(image.src) && (
+                            <img
+                                src={getSafeUrl(image.src)}
+                                alt={language === 'ar' ? image.titleAr : image.titleEn}
+                                loading="lazy"
+                            />
+                        )}
                         <div className="image-gallery__overlay">
                             <span className="image-gallery__zoom-icon">🔍</span>
                         </div>
@@ -156,16 +162,18 @@ export default function ImageGallery({ images = [] }) {
 
                         {/* Scrollable Image Container */}
                         <div className="lightbox__image-container">
-                            <img
-                                src={selectedImage.src}
-                                alt={language === 'ar' ? selectedImage.titleAr : selectedImage.titleEn}
-                                className="lightbox__image"
-                                style={{
-                                    transform: `scale(${zoomLevel / 100})`,
-                                    transformOrigin: 'center center',
-                                    transition: 'transform 0.2s ease'
-                                }}
-                            />
+                            {getSafeUrl(selectedImage.src) && (
+                                <img
+                                    src={getSafeUrl(selectedImage.src)}
+                                    alt={language === 'ar' ? selectedImage.titleAr : selectedImage.titleEn}
+                                    className="lightbox__image"
+                                    style={{
+                                        transform: `scale(${zoomLevel / 100})`,
+                                        transformOrigin: 'center center',
+                                        transition: 'transform 0.2s ease'
+                                    }}
+                                />
+                            )}
                         </div>
 
                         {/* Caption/Footer */}
