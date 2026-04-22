@@ -1,0 +1,4 @@
+## 2024-05-18 - Fix Insecure Deserialization in LocalStorage Parsing
+**Vulnerability:** Multiple `JSON.parse` operations on data retrieved from `localStorage` were performed synchronously without strict type validation or `try...catch` blocks.
+**Learning:** This is an insecure deserialization pattern. Malformed or unexpectedly typed data (e.g., an array instead of an object, or invalid JSON) in `localStorage` can cause uncaught exceptions, potentially leading to application crashes (DoS) or unexpected states when properties are accessed.
+**Prevention:** Always wrap `JSON.parse` operations that process `localStorage` content in `try...catch` blocks. Strictly validate the returned data type and schema (e.g., using `typeof === 'object'`, `Array.isArray()`, and `!== null`) before consuming the parsed data. Additionally, avoid logging raw errors to `console.error` in production to prevent information leakage.
