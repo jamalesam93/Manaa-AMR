@@ -5,7 +5,13 @@ const STORAGE_KEY = 'manaa_quizProgress'
 export function getProgressData() {
     try {
         const stored = localStorage.getItem(STORAGE_KEY)
-        return stored ? JSON.parse(stored) : {
+        if (stored) {
+            const data = JSON.parse(stored)
+            if (data && typeof data === 'object' && !Array.isArray(data)) {
+                return data
+            }
+        }
+        return {
             totalQuizzes: 0,
             totalQuestions: 0,
             correctAnswers: 0,
@@ -17,7 +23,9 @@ export function getProgressData() {
             perfectQuizzes: 0
         }
     } catch (error) {
-        console.error('Error loading progress:', error)
+        if (import.meta.env.DEV) {
+            console.error('Error loading progress:', error)
+        }
         return {
             totalQuizzes: 0,
             totalQuestions: 0,
