@@ -1,5 +1,6 @@
 import { useState, useRef } from 'react'
 import { useApp } from '../../contexts/AppContext'
+import { getSafeUrl } from '../../utils/security.js'
 
 /**
  * Reusable MediaPlayer component for video and audio playback
@@ -78,9 +79,15 @@ export default function MediaPlayer({
     }
 
     const handleDownload = () => {
+        const safeUrl = getSafeUrl(src)
+        if (!safeUrl) {
+            console.error('Unsafe download URL detected')
+            return
+        }
+
         const link = document.createElement('a')
-        link.href = src
-        link.download = src.split('/').pop() || 'media-file'
+        link.href = safeUrl
+        link.download = safeUrl.split('/').pop() || 'media-file'
         document.body.appendChild(link)
         link.click()
         document.body.removeChild(link)
@@ -112,8 +119,8 @@ export default function MediaPlayer({
                 <div className="media-player__video-container">
                     <video
                         ref={mediaRef}
-                        src={src}
-                        poster={poster}
+                        src={getSafeUrl(src)}
+                        poster={getSafeUrl(poster)}
                         onTimeUpdate={handleTimeUpdate}
                         onLoadedMetadata={handleLoadedMetadata}
                         onEnded={handleEnded}
@@ -138,7 +145,7 @@ export default function MediaPlayer({
                 <div className="media-player__audio-container media-player__audio-native">
                     <audio
                         ref={mediaRef}
-                        src={src}
+                        src={getSafeUrl(src)}
                         controls
                         preload="auto"
                         onTimeUpdate={handleTimeUpdate}
