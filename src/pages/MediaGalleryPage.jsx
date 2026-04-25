@@ -99,7 +99,7 @@ const getAudioContent = (language) => {
 }
 
 export default function MediaGalleryPage() {
-    const { t, language } = useApp()
+    const { language } = useApp()
     const [activeTab, setActiveTab] = useState('infographics')
 
     const tabs = [
