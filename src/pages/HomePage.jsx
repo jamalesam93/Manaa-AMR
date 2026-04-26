@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useApp } from '../contexts/AppContext'
 import { getStatistics } from '../utils/progressTracker'
+import { getSafeUrl } from '../utils/security'
 import { getStreakInfo } from '../utils/streakTracker'
 import { getUnlockedAchievements, ACHIEVEMENTS } from '../utils/achievements'
 import DailyChallenge from '../components/gamification/DailyChallenge'
@@ -300,7 +301,7 @@ export default function HomePage() {
                     {quickActions.map((action, index) => (
                         <a
                             key={index}
-                            href={action.to}
+                            href={getSafeUrl(action.to)}
                             className="card animate-slideUp"
                             style={{
                                 textDecoration: 'none',

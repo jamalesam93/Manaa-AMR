@@ -1,0 +1,4 @@
+## 2025-04-26 - Prevent DOM-based XSS in Media Components
+**Vulnerability:** Dynamic URLs used in `href` and `src` attributes in `MediaPlayer.jsx` and `ImageGallery.jsx` were not sanitized. Attackers could potentially inject `javascript:` URLs to execute arbitrary JavaScript if the URLs are user-controlled.
+**Learning:** React handles `href` and `src` dynamically and does not automatically prevent `javascript:` URLs from executing on click. Media components need a centralized URL sanitization function. Also `getSafeUrl` should return `undefined`/`null` for missing inputs to avoid `src=""` rendering side-effects.
+**Prevention:** Implement a strict URL sanitization utility (`src/utils/security.js`) and use it to wrap dynamic URL assignments. Validate input type as string to prevent bypasses.
