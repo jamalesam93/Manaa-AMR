@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useApp } from '../../contexts/AppContext'
+import { getSafeUrl } from '../../utils/security.js'
 
 /**
  * ImageGallery component for displaying infographics and images
@@ -51,9 +52,11 @@ export default function ImageGallery({ images = [] }) {
     }
 
     const handleDownload = (image) => {
+        const safeSrc = getSafeUrl(image.src)
+        if (!safeSrc) return
         const link = document.createElement('a')
-        link.href = image.src
-        link.download = image.src.split('/').pop() || 'infographic'
+        link.href = safeSrc
+        link.download = safeSrc.split('/').pop() || 'infographic'
         document.body.appendChild(link)
         link.click()
         document.body.removeChild(link)
@@ -71,20 +74,23 @@ export default function ImageGallery({ images = [] }) {
         <>
             {/* Image Grid */}
             <div className="image-gallery">
-                {images.map((image, index) => (
-                    <div
-                        key={image.id || index}
-                        className="image-gallery__item"
-                        onClick={() => handleImageClick(image)}
-                        role="button"
-                        tabIndex={0}
-                        onKeyDown={(e) => e.key === 'Enter' && handleImageClick(image)}
-                    >
-                        <img
-                            src={image.src}
-                            alt={language === 'ar' ? image.titleAr : image.titleEn}
-                            loading="lazy"
-                        />
+                {images.map((image, index) => {
+                    const safeSrc = getSafeUrl(image.src)
+                    if (!safeSrc) return null
+                    return (
+                        <div
+                            key={image.id || index}
+                            className="image-gallery__item"
+                            onClick={() => handleImageClick(image)}
+                            role="button"
+                            tabIndex={0}
+                            onKeyDown={(e) => e.key === 'Enter' && handleImageClick(image)}
+                        >
+                            <img
+                                src={safeSrc}
+                                alt={language === 'ar' ? image.titleAr : image.titleEn}
+                                loading="lazy"
+                            />
                         <div className="image-gallery__overlay">
                             <span className="image-gallery__zoom-icon">🔍</span>
                         </div>
@@ -94,7 +100,8 @@ export default function ImageGallery({ images = [] }) {
                             </div>
                         )}
                     </div>
-                ))}
+                    )
+                })}
             </div>
 
             {/* Lightbox Modal with Zoom Controls */}
@@ -157,7 +164,7 @@ export default function ImageGallery({ images = [] }) {
                         {/* Scrollable Image Container */}
                         <div className="lightbox__image-container">
                             <img
-                                src={selectedImage.src}
+                                src={getSafeUrl(selectedImage.src)}
                                 alt={language === 'ar' ? selectedImage.titleAr : selectedImage.titleEn}
                                 className="lightbox__image"
                                 style={{
