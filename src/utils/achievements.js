@@ -141,11 +141,16 @@ export const ACHIEVEMENTS = {
 export function getUnlockedAchievements() {
     try {
         const stored = localStorage.getItem(STORAGE_KEY)
-        return stored ? JSON.parse(stored) : []
-    } catch (error) {
-        console.error('Error loading achievements:', error)
-        return []
+        if (stored) {
+            const data = JSON.parse(stored)
+            if (Array.isArray(data)) {
+                return data
+            }
+        }
+    } catch {
+        if (import.meta.env.DEV) console.error('Error loading achievements')
     }
+    return []
 }
 
 export function checkAchievements(progress, streak, language = 'en', dailyChallenge = null) {
