@@ -1,0 +1,4 @@
+## 2024-05-04 - [Fix Insecure Deserialization in localStorage]
+**Vulnerability:** Found multiple instances where data loaded from `localStorage` in `src/utils/dailyChallenge.js` and `src/contexts/AppContext.jsx` was being passed directly to `JSON.parse()` without a `try-catch` block or schema validation.
+**Learning:** If an attacker (or random storage corruption) modifies `localStorage` to be invalid JSON, the application completely crashes and stops rendering due to `JSON.parse` throwing an error. This is a DoS via insecure deserialization, where unexpected input state crashes the front-end application context.
+**Prevention:** Always wrap `JSON.parse()` of `localStorage` items in a `try-catch` block and explicitly validate that the parsed data structure matches expectations (e.g. `typeof data === 'object'`, `Array.isArray(parsed)`) to gracefully fall back to default values instead of crashing.
