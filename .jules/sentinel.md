@@ -1,0 +1,4 @@
+## 2025-02-28 - Insecure Deserialization Vulnerability
+**Vulnerability:** Data loaded from `localStorage` (`manaa_dailyChallenge`, `manaa_familyProfiles`) was parsed with `JSON.parse` and used immediately without schema or type validation. This could lead to application crashes, unexpected behavior, or object-injection attacks if an attacker controls `localStorage`.
+**Learning:** `JSON.parse` alone does not validate schemas, and its unchecked return values can be unexpected primitives, arrays, or nulls when an object is expected, creating logical vulnerabilities and DoS opportunities.
+**Prevention:** Always wrap `JSON.parse` in a `try-catch` block. Strictly validate the data type (e.g., `typeof data === 'object' && !Array.isArray(data) && data !== null` for objects or `Array.isArray(data)` for arrays) before utilizing it. Fail securely with reasonable defaults and log conditionally (only in dev).
