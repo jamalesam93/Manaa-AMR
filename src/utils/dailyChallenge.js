@@ -7,10 +7,14 @@ export function getDailyChallenge() {
     const stored = localStorage.getItem(STORAGE_KEY)
     
     if (stored) {
-        const data = JSON.parse(stored)
-        // If we have today's challenge, return it
-        if (data.date === today) {
-            return data
+        try {
+            const data = JSON.parse(stored)
+            // If we have today's challenge, return it
+            if (data && typeof data === 'object' && !Array.isArray(data) && data.date === today) {
+                return data
+            }
+        } catch (error) {
+            console.error('Error parsing daily challenge:', error)
         }
     }
     
@@ -41,26 +45,39 @@ export function setDailyChallenge(scenario, userAnswer, isCorrect) {
 
 export function getDailyChallengeStats() {
     const stored = localStorage.getItem(STORAGE_KEY)
+    const defaultStats = {
+        totalCompleted: 0,
+        currentStreak: 0,
+        longestStreak: 0,
+        lastCompletedDate: null,
+        todayCompleted: false
+    }
+
     if (!stored) {
-        return {
-            totalCompleted: 0,
-            currentStreak: 0,
-            longestStreak: 0,
-            lastCompletedDate: null
-        }
+        return defaultStats
     }
     
-    // For now, we'll track basic stats
-    // In a full implementation, you'd store an array of all completed challenges
-    const data = JSON.parse(stored)
-    const today = new Date().toISOString().split('T')[0]
-    
-    return {
-        totalCompleted: data.completed ? 1 : 0,
-        currentStreak: data.date === today && data.completed ? 1 : 0,
-        longestStreak: data.completed ? 1 : 0,
-        lastCompletedDate: data.completed ? data.date : null,
-        todayCompleted: data.date === today && data.completed
+    try {
+        // For now, we'll track basic stats
+        // In a full implementation, you'd store an array of all completed challenges
+        const data = JSON.parse(stored)
+
+        if (!data || typeof data !== 'object' || Array.isArray(data)) {
+            return defaultStats
+        }
+
+        const today = new Date().toISOString().split('T')[0]
+
+        return {
+            totalCompleted: data.completed ? 1 : 0,
+            currentStreak: data.date === today && data.completed ? 1 : 0,
+            longestStreak: data.completed ? 1 : 0,
+            lastCompletedDate: data.completed ? data.date : null,
+            todayCompleted: data.date === today && data.completed
+        }
+    } catch (error) {
+        console.error('Error parsing daily challenge stats:', error)
+        return defaultStats
     }
 }
 

@@ -1,0 +1,4 @@
+## 2026-05-08 - Insecure Deserialization in LocalStorage Parses
+**Vulnerability:** Insecure deserialization. Using `JSON.parse(localStorage.getItem(key))` without robust type checking before destructuring or array/object-specific operations (e.g., `familyProfiles` array map/filter).
+**Learning:** React state or logic expecting specific complex data structures (arrays/objects) can crash or be manipulated if `localStorage` data is modified directly by the user to an invalid schema (e.g. converting an Array to an Object), causing Uncaught TypeErrors.
+**Prevention:** Always wrap `JSON.parse` in a `try...catch` block. Validate the result schema before trusting it (e.g., `Array.isArray(parsed)`, `typeof parsed === 'object' && parsed !== null && !Array.isArray(parsed)`). Return safe defaults if validation fails.
