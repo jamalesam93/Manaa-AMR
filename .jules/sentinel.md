@@ -1,0 +1,4 @@
+## 2024-05-09 - [Insecure Deserialization of LocalStorage Data]
+**Vulnerability:** Found insecure deserialization of `localStorage` data via unhandled `JSON.parse` in `src/utils/dailyChallenge.js`. If an attacker or a glitch introduces malformed data into `localStorage`, it will cause a crash (Unhandled Exception leading to a localized Denial of Service), potentially breaking the app.
+**Learning:** `JSON.parse` on untrusted or external inputs (like `localStorage` which is modifiable by users/extensions) without proper exception handling and strict type checking can lead to vulnerabilities or application crashes.
+**Prevention:** Always wrap `JSON.parse` in a `try-catch` block, explicitly validate that the parsed data matches the expected type (e.g., `typeof data === 'object' && !Array.isArray(data)` for expected objects), and avoid leaking stack traces in error messages by hiding them in production (`if (import.meta.env.DEV)`).
