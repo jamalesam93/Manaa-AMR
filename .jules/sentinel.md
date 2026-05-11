@@ -1,0 +1,4 @@
+## 2024-05-11 - Use Cryptographically Secure Random IDs
+**Vulnerability:** Predictable Object Identifiers
+**Learning:** Object identifiers (such as user profile IDs and quiz result IDs) were being generated using `Date.now().toString()`. This approach is predictable, potentially leading to identifier collisions and exposing systems to Insecure Direct Object Reference (IDOR) vulnerabilities or replay attacks, as an attacker can easily guess or brute-force the creation timestamps.
+**Prevention:** Always use `crypto.randomUUID()` when generating unique identifiers in client-side or server-side JavaScript to ensure cryptographically strong pseudo-randomness and unpredictability.
