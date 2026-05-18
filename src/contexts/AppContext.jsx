@@ -124,8 +124,9 @@ export function AppProvider({ children }) {
 
     // Family profile helpers
     const addFamilyProfile = (profile) => {
+        // Use cryptographically secure UUID instead of predictable timestamp
         const newProfile = {
-            id: Date.now().toString(),
+            id: crypto.randomUUID(),
             createdAt: new Date().toISOString(),
             ...profile
         }

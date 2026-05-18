@@ -36,8 +36,9 @@ export function saveQuizResult(quizData) {
     const progress = getProgressData()
     const { score, total, correct, scenarios, date } = quizData
     
+    // Use cryptographically secure UUID instead of predictable timestamp
     const quizResult = {
-        id: Date.now().toString(),
+        id: crypto.randomUUID(),
         date: date || new Date().toISOString(),
         score,
         total,
