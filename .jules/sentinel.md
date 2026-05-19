@@ -1,0 +1,4 @@
+## 2024-05-19 - Insecure ID Generation using `Date.now()`
+**Vulnerability:** The application was using `Date.now().toString()` to generate unique IDs for family profiles and quiz results.
+**Learning:** `Date.now()` produces predictable, non-random values based on the current timestamp, which can lead to ID collisions if multiple entries are created simultaneously. In a more complex system, this could also lead to Insecure Direct Object Reference (IDOR) vulnerabilities since an attacker could predict IDs.
+**Prevention:** Always use cryptographically secure random number generators, such as `crypto.randomUUID()`, to generate unique identifiers instead of relying on timestamps or `Math.random()`.
