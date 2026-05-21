@@ -1,0 +1,5 @@
+## 2024-05-18 - Prevent Predictable Identifier Generation
+
+**Vulnerability:** Weak identifier generation using `Date.now().toString()` was found in multiple locations (`src/contexts/AppContext.jsx` for family profiles and `src/utils/progressTracker.js` for quiz results). This predictable sequence allows attackers to guess valid IDs, leading to potential Insecure Direct Object Reference (IDOR) vulnerabilities if these IDs are ever synchronized or used to access records in an API context.
+**Learning:** Developers sometimes use `Date.now().toString()` as a quick way to generate unique IDs locally, unaware that the predictability of timestamps renders them unsuitable for security-sensitive identifiers.
+**Prevention:** Always use cryptographically secure random identifier generation, such as `crypto.randomUUID()`, for any entity ID (e.g., profiles, results, sessions) to ensure unpredictability and mitigate IDOR risks across the application.
