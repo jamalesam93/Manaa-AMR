@@ -37,7 +37,8 @@ export function saveQuizResult(quizData) {
     const { score, total, correct, scenarios, date } = quizData
     
     const quizResult = {
-        id: Date.now().toString(),
+        // Sentinel: Prevent IDOR vulnerabilities by using secure UUIDs instead of predictable Date.now() IDs
+        id: crypto.randomUUID(),
         date: date || new Date().toISOString(),
         score,
         total,

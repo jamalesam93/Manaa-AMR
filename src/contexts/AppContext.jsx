@@ -125,7 +125,8 @@ export function AppProvider({ children }) {
     // Family profile helpers
     const addFamilyProfile = (profile) => {
         const newProfile = {
-            id: Date.now().toString(),
+            // Sentinel: Prevent IDOR vulnerabilities by using secure UUIDs instead of predictable Date.now() IDs
+            id: crypto.randomUUID(),
             createdAt: new Date().toISOString(),
             ...profile
         }
