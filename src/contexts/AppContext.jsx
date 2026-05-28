@@ -125,7 +125,8 @@ export function AppProvider({ children }) {
     // Family profile helpers
     const addFamilyProfile = (profile) => {
         const newProfile = {
-            id: Date.now().toString(),
+            // SECURITY: Use crypto.randomUUID() for cryptographically secure, non-predictable identifiers to prevent IDOR vulnerabilities
+            id: crypto.randomUUID(),
             createdAt: new Date().toISOString(),
             ...profile
         }
