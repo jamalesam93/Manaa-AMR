@@ -1,0 +1,4 @@
+## 2025-02-28 - Insecure ID Generation Vulnerability
+**Vulnerability:** Use of `Date.now().toString()` for unique identifiers (`id` fields in `src/utils/progressTracker.js` and `src/contexts/AppContext.jsx`).
+**Learning:** `Date.now().toString()` generates predictable values based on the current timestamp. Using this for entity IDs exposes the application to IDOR (Insecure Direct Object Reference) vulnerabilities, as an attacker can easily guess or brute-force valid IDs, potentially gaining unauthorized access to or mutating other users' data (e.g., family profiles, quiz results). This violates the principle of using cryptographically secure random values for security-sensitive identifiers.
+**Prevention:** Always use `crypto.randomUUID()` (or `crypto.getRandomValues()` if a different format is required) for generating unique identifiers. This ensures IDs are universally unique and cryptographically secure, preventing predictability and guessing attacks.
