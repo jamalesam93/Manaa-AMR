@@ -1,0 +1,4 @@
+## 2026-05-31 - [Predictable IDs leading to potential IDOR]
+**Vulnerability:** Insecure ID Generation using `Date.now().toString()` instead of cryptographically secure identifiers (e.g. `crypto.randomUUID()`) found in `src/utils/progressTracker.js` and `src/contexts/AppContext.jsx`.
+**Learning:** `Date.now().toString()` generates predictable values that an attacker could guess, making the application vulnerable to Insecure Direct Object Reference (IDOR) attacks where identifiers are used to access or modify resources.
+**Prevention:** Always use `crypto.randomUUID()` to generate non-predictable, secure, and unique IDs.
