@@ -1,0 +1,4 @@
+## 2024-05-24 - [Insecure Direct Object Reference (IDOR) Risk via Predictable Identifiers]
+**Vulnerability:** The application used `Date.now().toString()` to generate IDs for quiz results (`src/utils/progressTracker.js`) and family profiles (`src/contexts/AppContext.jsx`).
+**Learning:** `Date.now()` produces predictable, sequential values. While currently used client-side, if these IDs were ever synchronized with a backend or used in public URLs (e.g., sharing a quiz result `/results/<id>`), attackers could easily guess other users' IDs to access their sensitive data, leading to an Insecure Direct Object Reference (IDOR) vulnerability.
+**Prevention:** Always use cryptographically secure, non-predictable identifier generation such as `crypto.randomUUID()` when creating unique IDs to ensure that resource endpoints cannot be guessed by malicious actors.

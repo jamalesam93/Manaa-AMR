@@ -37,7 +37,7 @@ export function saveQuizResult(quizData) {
     const { score, total, correct, scenarios, date } = quizData
     
     const quizResult = {
-        id: Date.now().toString(),
+        id: crypto.randomUUID(), // Security fix: Use cryptographically secure ID generation
         date: date || new Date().toISOString(),
         score,
         total,
