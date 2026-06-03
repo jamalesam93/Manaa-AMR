@@ -15,11 +15,14 @@ export const ALL_QUIZ_SCENARIOS = [
 // Default number of questions per quiz session
 export const QUESTIONS_PER_QUIZ = 5;
 
-// Helper function to shuffle array (Fisher-Yates)
+// Helper function to shuffle array (Fisher-Yates) using secure random
 export function shuffleArray(array) {
     const shuffled = [...array];
     for (let i = shuffled.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
+        const randomBuffer = new Uint32Array(1);
+        crypto.getRandomValues(randomBuffer);
+        const randomFraction = randomBuffer[0] / (0xFFFFFFFF + 1);
+        const j = Math.floor(randomFraction * (i + 1));
         [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
     }
     return shuffled;
