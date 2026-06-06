@@ -10,7 +10,7 @@ export function getDailyChallenge() {
         try {
             const data = JSON.parse(stored)
             // If we have today's challenge, return it
-            if (data && typeof data === 'object' && data.date === today) {
+            if (data && typeof data === 'object' && !Array.isArray(data) && data.date === today) {
                 return data
             }
         } catch (error) {
@@ -40,7 +40,9 @@ export function setDailyChallenge(scenario, userAnswer, isCorrect) {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(challengeData))
         return challengeData
     } catch (error) {
-        console.error('Error saving daily challenge:', error)
+        if (import.meta.env.DEV) {
+            console.error('Error saving daily challenge:', error)
+        }
         return null
     }
 }
@@ -62,7 +64,7 @@ export function getDailyChallengeStats() {
     // In a full implementation, you'd store an array of all completed challenges
     try {
         const data = JSON.parse(stored)
-        if (!data || typeof data !== 'object') {
+        if (!data || typeof data !== 'object' || Array.isArray(data)) {
             return defaultStats
         }
 
