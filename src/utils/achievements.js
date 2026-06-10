@@ -141,9 +141,19 @@ export const ACHIEVEMENTS = {
 export function getUnlockedAchievements() {
     try {
         const stored = localStorage.getItem(STORAGE_KEY)
-        return stored ? JSON.parse(stored) : []
+        if (stored) {
+            const parsed = JSON.parse(stored)
+            // SECURITY: Prevent insecure deserialization by enforcing expected type (array)
+            if (Array.isArray(parsed)) {
+                return parsed
+            }
+        }
+        return []
     } catch (error) {
-        console.error('Error loading achievements:', error)
+        // SECURITY: Fail securely, don't expose errors in production
+        if (import.meta.env.DEV) {
+            console.error('Error loading achievements:', error)
+        }
         return []
     }
 }
