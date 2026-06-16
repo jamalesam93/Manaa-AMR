@@ -3,7 +3,8 @@ export function isSafeUrl(url) {
     try {
         const parsed = new URL(url, 'https://example.com');
         const protocol = parsed.protocol.toLowerCase();
-        if (protocol === 'javascript:' || protocol === 'vbscript:') {
+        // Block dangerous protocols: javascript, vbscript, data, and file
+        if (protocol === 'javascript:' || protocol === 'vbscript:' || protocol === 'data:' || protocol === 'file:') {
             return false;
         }
         return true;
