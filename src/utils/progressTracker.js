@@ -3,32 +3,30 @@
 const STORAGE_KEY = 'manaa_quizProgress'
 
 export function getProgressData() {
+    const defaultData = {
+        totalQuizzes: 0,
+        totalQuestions: 0,
+        correctAnswers: 0,
+        quizHistory: [],
+        bestScore: 0,
+        averageScore: 0,
+        categoriesPlayed: {},
+        lastQuizDate: null,
+        perfectQuizzes: 0
+    }
     try {
         const stored = localStorage.getItem(STORAGE_KEY)
-        return stored ? JSON.parse(stored) : {
-            totalQuizzes: 0,
-            totalQuestions: 0,
-            correctAnswers: 0,
-            quizHistory: [],
-            bestScore: 0,
-            averageScore: 0,
-            categoriesPlayed: {},
-            lastQuizDate: null,
-            perfectQuizzes: 0
+        if (!stored) return defaultData
+        const parsed = JSON.parse(stored)
+        if (parsed && typeof parsed === 'object') {
+            return { ...defaultData, ...parsed }
         }
+        return defaultData
     } catch (error) {
-        console.error('Error loading progress:', error)
-        return {
-            totalQuizzes: 0,
-            totalQuestions: 0,
-            correctAnswers: 0,
-            quizHistory: [],
-            bestScore: 0,
-            averageScore: 0,
-            categoriesPlayed: {},
-            lastQuizDate: null,
-            perfectQuizzes: 0
+        if (import.meta.env.DEV) {
+            console.error('Error loading progress:', error)
         }
+        return defaultData
     }
 }
 
@@ -83,7 +81,9 @@ export function saveQuizResult(quizData) {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(progress))
         return progress
     } catch (error) {
-        console.error('Error saving progress:', error)
+        if (import.meta.env.DEV) {
+            console.error('Error saving progress:', error)
+        }
         return progress
     }
 }
@@ -112,7 +112,9 @@ export function clearProgress() {
         localStorage.removeItem(STORAGE_KEY)
         return true
     } catch (error) {
-        console.error('Error clearing progress:', error)
+        if (import.meta.env.DEV) {
+            console.error('Error clearing progress:', error)
+        }
         return false
     }
 }
