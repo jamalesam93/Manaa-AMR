@@ -1,4 +1,7 @@
 ## 2024-05-15 - [Insecure LocalStorage Deserialization]
 **Vulnerability:** Several utility functions (`getDailyChallenge`, `getDailyChallengeStats`) and the app context (`AppContext.jsx`) parse data from `localStorage` using `JSON.parse` without `try-catch` blocks or schema validation.
 **Learning:** This exposes the application to DoS attacks through local storage injection. If the stored data becomes invalid JSON, the parsing throws an error that crashes the component or the whole application, leading to a persistent unhandled exception until `localStorage` is cleared manually.
-**Prevention:** All data retrieved from `localStorage` must be parsed within `try-catch` blocks, strictly validated for expected types (e.g., `Array.isArray`, `typeof === 'object'`), and ensure `console.error` calls are restricted to development (`import.meta.env.DEV`).
+**Prevention:** All data retrieved from `localStorage` must be parsed within `try-catch` blocks, strictly validated for expected types (e.g., `Array.isArray`, `typeof === 'object'`), and ensure `console.error` calls are restricted to development (`import.meta.env.DEV`).## $(date +%Y-%m-%d) - Block file: and data: protocols in URL validation
+**Vulnerability:** The `isSafeUrl` function only blocked `javascript:` and `vbscript:`, allowing potentially dangerous `data:` and `file:` URIs.
+**Learning:** `data:` URLs can be used for XSS in some contexts (like `iframe src` or object embeds), and `file:` URIs could theoretically be exploited in specific native wrapper contexts for local file disclosure.
+**Prevention:** Always maintain a strict allowlist of protocols if possible. If using a blocklist, ensure all potentially dangerous protocols (including `data:`, `file:`, `javascript:`, `vbscript:`) are blocked.
