@@ -8,3 +8,8 @@
 **Learning:** URL sanitization needs to be comprehensive. Permitting `data:` protocols allows bypassing standard XSS protections by executing scripts embedded in the data URI itself. Permitting `file:` protocols introduces risks associated with local file access.
 **Prevention:** Always maintain a strict blocklist of protocols for URL sanitization or ideally an allowlist of permitted protocols. In this case, `data:` and `file:` were added to the blocklist in `isSafeUrl` to strengthen defenses against XSS and path traversal vulnerabilities.
 
+
+## 2024-05-18 - [Sensitive Information Disclosure in Error Logs]
+**Vulnerability:** Calls to `console.error` in the `ErrorBoundary` component and social sharing utility (`shareUtils.js`) were missing environment checks, meaning that detailed error objects and stack traces could be leaked to the browser console in production.
+**Learning:** React error boundaries and general error catch blocks often inadvertently expose application internals to users or attackers looking at the console if not explicitly restricted.
+**Prevention:** To prevent sensitive information exposure in production, all `console.error` calls and debug information must be wrapped in `if (import.meta.env.DEV)` blocks.
