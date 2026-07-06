@@ -8,3 +8,7 @@
 **Learning:** URL sanitization needs to be comprehensive. Permitting `data:` protocols allows bypassing standard XSS protections by executing scripts embedded in the data URI itself. Permitting `file:` protocols introduces risks associated with local file access.
 **Prevention:** Always maintain a strict blocklist of protocols for URL sanitization or ideally an allowlist of permitted protocols. In this case, `data:` and `file:` were added to the blocklist in `isSafeUrl` to strengthen defenses against XSS and path traversal vulnerabilities.
 
+## 2026-07-06 - [Information Leakage via console.error]
+**Vulnerability:** Raw `console.error` statements were used in the global ErrorBoundary and share utilities to log error details and stack traces.
+**Learning:** This exposes internal application errors and potentially sensitive application state to the client-side console in production environments, creating an information disclosure risk.
+**Prevention:** All debug and error logging sent to the console must be wrapped within an `if (import.meta.env.DEV)` block to ensure they are stripped during production builds.
